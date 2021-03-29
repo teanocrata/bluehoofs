@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Navbar } from "@blueprintjs/core";
 
 import Configuration from "./Configuration";
@@ -10,7 +10,7 @@ import "./App.css";
 
 function App() {
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <title>Blue hoofs</title>
         <meta name="description" content="Mi band 2 for hoofs friends" />
@@ -21,7 +21,7 @@ function App() {
           <Navbar.Heading>Blue hoofs</Navbar.Heading>
         </Navbar.Group>
       </Navbar>
-    </>
+    </HelmetProvider>
   );
 }
 
