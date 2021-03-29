@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Navbar } from "@blueprintjs/core";
+import { Navbar, Tag } from "@blueprintjs/core";
 
 import Configuration from "./Configuration";
 
@@ -9,6 +9,9 @@ import styles from "./App.module.css";
 import "./App.css";
 
 function App() {
+  const openTag = (_e: React.MouseEvent<HTMLDivElement,MouseEvent>) => 
+    window.open(`https://github.com/teanocrata/bluehoofs/releases/tag/v${process.env.REACT_APP_VERSION}`);
+
   return (
     <HelmetProvider>
       <Helmet>
@@ -18,7 +21,7 @@ function App() {
       <Configuration />
       <Navbar fixedToTop className={styles.toBottom}>
         <Navbar.Group align="center" className={styles.center}>
-          <Navbar.Heading>Blue hoofs</Navbar.Heading>
+          <Navbar.Heading>Blue hoofs <Tag interactive onClick={openTag}>{process.env.REACT_APP_VERSION}</Tag></Navbar.Heading>
         </Navbar.Group>
       </Navbar>
     </HelmetProvider>
