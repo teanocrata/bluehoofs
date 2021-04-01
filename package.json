@@ -3,6 +3,17 @@
   "version": "0.1.1",
   "private": true,
   "homepage": "https://teanocrata.github.io/bluehoofs",
+  "bugs": {
+    "url": "https://github.com/teanocrata/bluehoofs/issues"
+  },
+  "author": {
+    "name": "teanocrata",
+    "url": "https://teanocrata.github.io/"
+  },
+  "repository": {
+    "repository": "github:teanocrata/bluehoofs",
+    "type": "git"
+  },
   "dependencies": {
     "@blueprintjs/core": "^3.30.1",
     "@types/node": "^12.0.0",
