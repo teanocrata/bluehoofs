@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/teanocrata/bluehoofs/compare/v0.1.3...v0.1.4) (2021-04-03)
+
+
+### Features
+
+* add characteristic properties ([57dedb9](https://github.com/teanocrata/bluehoofs/commit/57dedb9877b95bf0680626c8bdd87334ea4abd3a))
+
 ### [0.1.3](https://github.com/teanocrata/bluehoofs/compare/v0.1.2...v0.1.3) (2021-04-03)
 
 
