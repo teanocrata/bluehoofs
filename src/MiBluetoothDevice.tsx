@@ -100,26 +100,34 @@ export class MiBluetoothDevice {
 					const characteristics = await Promise.all(
 						((await service?.getCharacteristics()) || []).map(
 							async characteristic => {
-								let descriptors: Array<BluetoothRemoteGATTDescriptor> = [];
+								let descriptorsInfo: Array<{
+									uuid: string;
+									type: string;
+									value: string | undefined;
+									readedValue: string;
+									characteristicuuid: string;
+									found: boolean;
+								}> = [];
 								try {
-									descriptors = await characteristic.getDescriptors();
+									const descriptors = await characteristic.getDescriptors();
+									descriptorsInfo = await Promise.all(
+										descriptors.map(async descriptor => ({
+											uuid: descriptor.uuid,
+											type: 'descriptor',
+											value:
+												descriptor.value &&
+												new TextDecoder().decode(descriptor.value),
+											readedValue: new TextDecoder().decode(
+												await descriptor.readValue()
+											),
+											characteristicuuid: descriptor.characteristic.uuid,
+											found: charactericticUUIDs.has(descriptor.uuid),
+										}))
+									);
 								} catch (error) {
 									console.error(error);
 								}
-								const descriptorsInfo = await Promise.all(
-									descriptors.map(async descriptor => ({
-										uuid: descriptor.uuid,
-										type: 'descriptor',
-										value:
-											descriptor.value &&
-											new TextDecoder().decode(descriptor.value),
-										readedValue: new TextDecoder().decode(
-											await descriptor.readValue()
-										),
-										characteristicuuid: descriptor.characteristic.uuid,
-										found: charactericticUUIDs.has(descriptor.uuid),
-									}))
-								);
+
 								return {
 									uuid: characteristic.uuid,
 									type: 'characteristic',
