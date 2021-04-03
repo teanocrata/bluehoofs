@@ -11,8 +11,6 @@ export class MiBluetoothDevice {
 		return Object.keys(MI_GATT_PROFILE);
 	}
 
-	UUIDs: any | null;
-
 	_device: BluetoothDevice;
 	id: BluetoothDevice['id'];
 	name: BluetoothDevice['name'];
@@ -84,7 +82,7 @@ export class MiBluetoothDevice {
 				!primaryServices.some(primaryService => uuid === primaryService.uuid) &&
 				console.warn(
 					`${uuid} - ${
-						MI_GATT_PROFILE[uuid as keyof typeof MI_GATT_PROFILE].label
+						MI_GATT_PROFILE[uuid as keyof typeof MI_GATT_PROFILE]
 					} not found in primary services`
 				)
 		);
@@ -141,7 +139,6 @@ export class MiBluetoothDevice {
 					);
 					return {
 						uuid: service?.uuid,
-						label: serviceDefinition.label,
 						characteristics,
 						primary: service?.isPrimary,
 						device: service?.device,

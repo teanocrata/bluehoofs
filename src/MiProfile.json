@@ -3,7 +3,6 @@
 		"attr handle": 1,
 		"end grp handle": 7,
 		"uuid": "00001800-0000-1000-8000-00805f9b34fb",
-		"label": "Generic Access",
 		"characteristics": [
 			{
 				"handle": 1,
@@ -39,7 +38,6 @@
 		"attr handle": 8,
 		"end grp handle": 11,
 		"uuid": "00001801-0000-1000-8000-00805f9b34fb",
-		"label": "Generic Attribute",
 		"characteristics": [
 			{
 				"handle": 8,
@@ -63,7 +61,6 @@
 		"attr handle": 12,
 		"end grp handle": 22,
 		"uuid": "0000180a-0000-1000-8000-00805f9b34fb",
-		"label": "Device Information",
 		"characteristics": [
 			{
 				"handle": 12,
@@ -115,7 +112,6 @@
 		"attr handle": 23,
 		"end grp handle": 28,
 		"uuid": "00001530-0000-3512-2118-0009af100700",
-		"label": "unknown",
 		"characteristics": [
 			{
 				"handle": 23,
@@ -147,7 +143,6 @@
 		"attr handle": 29,
 		"end grp handle": 35,
 		"uuid": "00001811-0000-1000-8000-00805f9b34fb",
-		"label": "Alert Notification",
 		"characteristics": [
 			{
 				"handle": 29,
@@ -183,7 +178,6 @@
 		"attr handle": 36,
 		"end grp handle": 38,
 		"uuid": "00001802-0000-1000-8000-00805f9b34fb",
-		"label": "Immediate Alert",
 		"characteristics": [
 			{
 				"handle": 36,
@@ -203,7 +197,6 @@
 		"attr handle": 39,
 		"end grp handle": 44,
 		"uuid": "0000180d-0000-1000-8000-00805f9b34fb",
-		"label": "Heart Rate",
 		"characteristics": [
 			{
 				"handle": 39,
@@ -235,7 +228,6 @@
 		"attr handle": 45,
 		"end grp handle": 81,
 		"uuid": "0000fee0-0000-1000-8000-00805f9b34fb",
-		"label": "Anhui Huami Information Technology Co., Ltd.",
 		"characteristics": [
 			{
 				"handle": 45,
@@ -391,7 +383,6 @@
 		"attr handle": 82,
 		"end grp handle": 102,
 		"uuid": "0000fee1-0000-1000-8000-00805f9b34fb",
-		"label": "Anhui Huami Information Technology Co., Ltd.",
 		"characteristics": [
 			{
 				"handle": 82,
