@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/teanocrata/bluehoofs/compare/v0.1.2...v0.1.3) (2021-04-03)
+
+
+### Features
+
+* add bluetooth icon ([525cf68](https://github.com/teanocrata/bluehoofs/commit/525cf68e40f466f4c2db5aafafb1065cf72edd88))
+* add characteristics to service ([00e238a](https://github.com/teanocrata/bluehoofs/commit/00e238aea0577c4a9379eb6100a890a1f2cacdee))
+* refactor & allow to remove device ([9f62d44](https://github.com/teanocrata/bluehoofs/commit/9f62d447cb263b9454fc4961f7d3a3f934c7c28d))
+
+
+### Bug Fixes
+
+* remove label from Profile ([61f18bb](https://github.com/teanocrata/bluehoofs/commit/61f18bb73188faafc778e6276577087e578ef733))
+
 ### [0.1.2](https://github.com/teanocrata/bluehoofs/compare/v0.1.1...v0.1.2) (2021-04-03)
 
 
