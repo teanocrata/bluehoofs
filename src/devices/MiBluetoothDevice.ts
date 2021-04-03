@@ -15,7 +15,8 @@ export class MiBluetoothDevice {
 	id: BluetoothDevice['id'];
 	name: BluetoothDevice['name'];
 	@observable gattConnected: boolean;
-	@observable gattServer: BluetoothRemoteGATTServer | null = null;
+	@observable.ref gattServer: BluetoothRemoteGATTServer | null = null;
+	@observable.ref services: Array<BluetoothRemoteGATTService> | null = null;
 	constructor(device: BluetoothDevice) {
 		this._device = device;
 		this.id = device.id;
@@ -40,6 +41,9 @@ export class MiBluetoothDevice {
 
 	@action setInfo = (info: any) => (this.info = info);
 
+	@action setServices = (services: Array<BluetoothRemoteGATTService> | null) =>
+		(this.services = services);
+
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
 		Toaster.create().show({
 			message: `${(event.target as BluetoothDevice).name} disconected`,
@@ -56,18 +60,20 @@ export class MiBluetoothDevice {
 			return true;
 		}
 
-		return this._device.gatt
-			?.connect()
-			.then(gattServer => {
+		try {
+			const gattServer = (await this._device.gatt?.connect()) || null;
+			this.setServer(gattServer);
+			if (gattServer) {
 				this.updateDevice(gattServer.device);
-				this.setServer(gattServer);
-				return gattServer;
-			})
-			.catch(error => {
-				console.error('Error while trying to connect ', this.name);
-				console.error(error);
-				return false;
-			});
+				const primaryServices = (await gattServer?.getPrimaryServices()) || [];
+				this.setServices(primaryServices);
+			}
+		} catch (error) {
+			this.setServer(null);
+			this.setServices(null);
+			console.error('Error while trying to connect ', this.name);
+			console.error(error);
+		}
 	};
 
 	scan = async () => {
@@ -76,6 +82,7 @@ export class MiBluetoothDevice {
 		}
 
 		const primaryServices = (await this.gattServer?.getPrimaryServices()) || [];
+		this.setServices(primaryServices);
 
 		Object.keys(MI_GATT_PROFILE).forEach(
 			uuid =>

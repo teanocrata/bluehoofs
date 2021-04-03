@@ -3,7 +3,7 @@ import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Navbar, Tag } from '@blueprintjs/core';
 
-import Configuration from './Configuration';
+import Configuration from '../components/Configuration';
 
 import styles from './App.module.css';
 import './App.css';

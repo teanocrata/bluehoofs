@@ -6,7 +6,7 @@ import { observable, ObservableMap, runInAction, action } from 'mobx';
 import { Button, Icon, NonIdealState } from '@blueprintjs/core';
 
 import DeviceCard from './DeviceCard';
-import { MiBluetoothDevice } from './MiBluetoothDevice';
+import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 
 import css from './Configuration.module.css';
 

@@ -5,7 +5,7 @@ import { MdBluetooth, MdBluetoothConnected } from 'react-icons/md';
 
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
-import { MiBluetoothDevice } from './MiBluetoothDevice';
+import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 
 interface Props {
 	device: MiBluetoothDevice;
@@ -34,7 +34,7 @@ export default class DeviceCard extends React.Component<Props> {
 		const { device } = this.props;
 
 		return (
-			<Card interactive={true}>
+			<Card interactive>
 				<h5>{device.name}</h5>
 				{device.gattConnected ? <MdBluetoothConnected /> : <MdBluetooth />}
 				<Switch
@@ -47,11 +47,12 @@ export default class DeviceCard extends React.Component<Props> {
 					onClick={this.handleScan}
 					text="Scan"
 				/>
-				{device.info && (
-					<pre>
-						<code>{JSON.stringify(device.info, null, 2)}</code>
-					</pre>
-				)}
+				{device.services &&
+					device.services.map(service => (
+						<Card key={service.uuid} interactive>
+							{service.uuid}
+						</Card>
+					))}
 			</Card>
 		);
 	}
