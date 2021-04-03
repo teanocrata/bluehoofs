@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button, Card, Switch } from '@blueprintjs/core';
+import { MdBluetooth, MdBluetoothConnected } from 'react-icons/md';
 
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
@@ -35,6 +36,7 @@ export default class DeviceCard extends React.Component<Props> {
 		return (
 			<Card interactive={true}>
 				<h5>{device.name}</h5>
+				{device.gattConnected ? <MdBluetoothConnected /> : <MdBluetooth />}
 				<Switch
 					disabled={this.connecting}
 					checked={device.gattConnected}
