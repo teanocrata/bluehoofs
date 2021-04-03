@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Switch } from '@blueprintjs/core';
+import { Button, Card, IActionProps, Switch } from '@blueprintjs/core';
 import { MdBluetooth, MdBluetoothConnected } from 'react-icons/md';
 
 import { observer } from 'mobx-react';
@@ -9,6 +9,7 @@ import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 
 interface Props {
 	device: MiBluetoothDevice;
+	onRemove: (device: MiBluetoothDevice) => void;
 }
 
 @observer
@@ -18,7 +19,7 @@ export default class DeviceCard extends React.Component<Props> {
 	@action toggleConnecting = () => (this.connecting = !this.connecting);
 
 	handleToggleConnect = () => {
-		if (this.props.device.gattConnected) {
+		if (this.props.device.gatt) {
 			this.props.device.disconnect();
 		} else {
 			this.toggleConnecting();
@@ -30,25 +31,25 @@ export default class DeviceCard extends React.Component<Props> {
 		this.props.device.scan();
 	};
 
+	handleRemove: IActionProps['onClick'] = event =>
+		this.props.onRemove(this.props.device);
+
 	render() {
 		const { device } = this.props;
 
 		return (
 			<Card interactive>
+				<Button icon="cross" onClick={this.handleRemove} />
 				<h5>{device.name}</h5>
-				{device.gattConnected ? <MdBluetoothConnected /> : <MdBluetooth />}
+				{device.gatt ? <MdBluetoothConnected /> : <MdBluetooth />}
 				<Switch
 					disabled={this.connecting}
-					checked={device.gattConnected}
+					checked={device.gatt !== null}
 					onChange={this.handleToggleConnect}
 				/>
-				<Button
-					disabled={!device.gattServer}
-					onClick={this.handleScan}
-					text="Scan"
-				/>
-				{device.services &&
-					device.services.map(service => (
+				<Button disabled={!device.gatt} onClick={this.handleScan} text="Scan" />
+				{device.primaryServices &&
+					device.primaryServices.map(service => (
 						<Card key={service.uuid} interactive>
 							{service.uuid}
 						</Card>

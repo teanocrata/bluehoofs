@@ -29,7 +29,7 @@ export default class Configuration extends React.Component {
 				runInAction(() => {
 					const currentDevice = this.devices.get(device.id);
 					if (currentDevice) {
-						currentDevice.updateDevice(device);
+						currentDevice.setServer(null);
 					} else {
 						this.devices.set(device.id, new MiBluetoothDevice(device));
 					}
@@ -65,10 +65,18 @@ export default class Configuration extends React.Component {
 		}
 	}
 
+	handleRemove = (device: MiBluetoothDevice) => this.devices.delete(device.id);
+
 	render() {
 		const devices: Array<ReactElement> = [];
 		this.devices.forEach(device => {
-			devices.push(<DeviceCard key={device.id} device={device} />);
+			devices.push(
+				<DeviceCard
+					key={device.id}
+					device={device}
+					onRemove={this.handleRemove}
+				/>
+			);
 		});
 
 		return (
