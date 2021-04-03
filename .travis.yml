@@ -12,7 +12,7 @@ script:
   - yarn build
 after_success:
   - yarn release
-  - git push --follow-tags https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git master    
+  - git push --follow-tags https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git master
 deploy:
   provider: pages
   skip_cleanup: true

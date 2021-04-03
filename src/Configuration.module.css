@@ -1,18 +1,18 @@
 .configuration {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .addButton {
-  flex-grow: 1;
+	flex-grow: 1;
 }
 
 .devices {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-gap: 8px;
-  padding: 8px;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 8px;
+	padding: 8px;
 }

@@ -1,8 +1,8 @@
 .toBottom {
-  bottom: 0 !important;
-  top: unset !important;
+	bottom: 0 !important;
+	top: unset !important;
 }
 
 .center {
-  justify-content: space-between;
+	justify-content: space-between;
 }
