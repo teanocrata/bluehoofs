@@ -1,5 +1,6 @@
 import { Toaster } from '@blueprintjs/core';
 import { observable, action } from 'mobx';
+import { HoofBluetoothService } from './HoofBluetoothService';
 
 export abstract class HoofBluetoothDevice {
 	_device: BluetoothDevice;
@@ -8,7 +9,7 @@ export abstract class HoofBluetoothDevice {
 
 	@observable.ref gatt: BluetoothRemoteGATTServer | null = null;
 	@observable.ref
-	primaryServices: Array<BluetoothRemoteGATTService> | null = null;
+	primaryServices: Array<HoofBluetoothService> | null = null;
 	constructor(device: BluetoothDevice) {
 		this._device = device;
 		this.id = device.id;
@@ -26,7 +27,9 @@ export abstract class HoofBluetoothDevice {
 
 	@action setPrimaryServices = (
 		services: Array<BluetoothRemoteGATTService> | null
-	) => (this.primaryServices = services);
+	) =>
+		(this.primaryServices =
+			services?.map(service => new HoofBluetoothService(service)) || null);
 
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
 		Toaster.create().show({
@@ -60,12 +63,11 @@ export abstract class HoofBluetoothDevice {
 	};
 
 	scan = async () => {
-		if (!this.primaryServices) {
-			await this.connect();
-		}
+		const primaryServices =
+			(await this._device.gatt?.getPrimaryServices()) || [];
 
 		const info = await Promise.all(
-			this.primaryServices!.map(async service => {
+			primaryServices!.map(async service => {
 				try {
 					const characteristics = await Promise.all(
 						((await service?.getCharacteristics()) || []).map(

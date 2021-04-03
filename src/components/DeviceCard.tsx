@@ -39,7 +39,7 @@ export default class DeviceCard extends React.Component<Props> {
 		const { device } = this.props;
 
 		return (
-			<Card interactive>
+			<Card>
 				<Button icon="cross" onClick={this.handleRemove} />
 				<h5>{device.name}</h5>
 				{device.gatt ? <MdBluetoothConnected /> : <MdBluetooth />}
