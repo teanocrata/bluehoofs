@@ -21,7 +21,10 @@ export default class Configuration extends React.Component {
 
 	addDevice = () => {
 		navigator.bluetooth
-			.requestDevice({ acceptAllDevices: true })
+			.requestDevice({
+				filters: [{ services: [MiBluetoothDevice.memberUUID] }],
+				optionalServices: MiBluetoothDevice.optionalServices,
+			})
 			.then(device =>
 				runInAction(() => {
 					const currentDevice = this.devices.get(device.id);
@@ -65,8 +68,6 @@ export default class Configuration extends React.Component {
 	render() {
 		const devices: Array<ReactElement> = [];
 		this.devices.forEach(device => {
-			//console.log(device.name, " connected ", device.gatt?.connected);
-
 			devices.push(<DeviceCard key={device.id} device={device} />);
 		});
 

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Card, Switch } from '@blueprintjs/core';
+import { Button, Card, Switch } from '@blueprintjs/core';
+
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { MiBluetoothDevice } from './MiBluetoothDevice';
 
 interface Props {
 	device: MiBluetoothDevice;
-	connected?: boolean;
 }
 
 @observer
@@ -25,17 +25,31 @@ export default class DeviceCard extends React.Component<Props> {
 		}
 	};
 
+	handleScan = () => {
+		this.props.device.scan();
+	};
+
 	render() {
-		const { device, connected } = this.props;
+		const { device } = this.props;
 
 		return (
 			<Card interactive={true}>
 				<h5>{device.name}</h5>
 				<Switch
 					disabled={this.connecting}
-					checked={connected}
+					checked={device.gattConnected}
 					onChange={this.handleToggleConnect}
 				/>
+				<Button
+					disabled={!device.gattServer}
+					onClick={this.handleScan}
+					text="Scan"
+				/>
+				{device.info && (
+					<pre>
+						<code>{JSON.stringify(device.info, null, 2)}</code>
+					</pre>
+				)}
 			</Card>
 		);
 	}
