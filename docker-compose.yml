@@ -13,13 +13,3 @@ services:
       - ./:/code
       - /code/node_modules
     command: yarn start
-  storybook:
-    build:
-      context: .
-      target: dev
-    ports:
-      - 9009:9009
-    volumes:
-      - ./:/code
-      - /code/node_modules
-    command: yarn storybook
