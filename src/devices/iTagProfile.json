@@ -1,0 +1,24 @@
+{
+	"0000ffe0-0000-1000-8000-00805f9b34fb": {
+		"attr handle": 1,
+		"end grp handle": 7,
+		"uuid": "0000ffe0-0000-1000-8000-00805f9b34fb",
+		"characteristics": [
+			{
+				"handle": 1,
+				"uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+			}
+		]
+	},
+	"00001802-0000-1000-8000-00805f9b34fb": {
+		"attr handle": 1,
+		"end grp handle": 7,
+		"uuid": "00001802-0000-1000-8000-00805f9b34fb",
+		"characteristics": [
+			{
+				"handle": 1,
+				"uuid": "00002a06-0000-1000-8000-00805f9b34fb"
+			}
+		]
+	}
+}

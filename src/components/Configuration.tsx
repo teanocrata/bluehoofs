@@ -7,14 +7,16 @@ import { Button, Icon, NonIdealState } from '@blueprintjs/core';
 
 import DeviceCard from './DeviceCard';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
+import { iTagBluetoothDevice } from '../devices/iTagBluetoothDevice';
 
 import css from './Configuration.module.css';
+import { GenericBluetoothDevice } from '../devices/GenericBluetoothDevice';
 
 @observer
 export default class Configuration extends React.Component {
 	@observable devices: ObservableMap<
 		string,
-		MiBluetoothDevice
+		MiBluetoothDevice | iTagBluetoothDevice
 	> = new ObservableMap();
 
 	@observable bluetoothAvailable: boolean = false;
@@ -22,8 +24,11 @@ export default class Configuration extends React.Component {
 	addDevice = () => {
 		navigator.bluetooth
 			.requestDevice({
-				filters: [{ services: [MiBluetoothDevice.memberUUID] }],
-				optionalServices: MiBluetoothDevice.optionalServices,
+				acceptAllDevices: true,
+				optionalServices: [
+					...MiBluetoothDevice.optionalServices,
+					...iTagBluetoothDevice.optionalServices,
+				],
 			})
 			.then(device =>
 				runInAction(() => {
@@ -31,7 +36,14 @@ export default class Configuration extends React.Component {
 					if (currentDevice) {
 						currentDevice.setServer(null);
 					} else {
-						this.devices.set(device.id, new MiBluetoothDevice(device));
+						this.devices.set(
+							device.id,
+							device.name?.startsWith('iTAG')
+								? new iTagBluetoothDevice(device)
+								: device.name?.startsWith('MI')
+								? new MiBluetoothDevice(device)
+								: new GenericBluetoothDevice(device)
+						);
 					}
 				})
 			)
