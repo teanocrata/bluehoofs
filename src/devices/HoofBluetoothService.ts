@@ -2,7 +2,7 @@ import { observable, runInAction } from 'mobx';
 
 export class HoofBluetoothService {
 	private _service: BluetoothRemoteGATTService;
-	name: string;
+	@observable name: string;
 	uuid: BluetoothRemoteGATTService['uuid'];
 
 	@observable.ref
@@ -11,6 +11,21 @@ export class HoofBluetoothService {
 		this._service = service;
 		this.name = service.uuid;
 		this.uuid = service.uuid;
+		fetch(
+			`https://teanocrata.github.io/ble-assigned-numbers/uuids/0x${service.uuid
+				.slice(4, 8)
+				.toUpperCase()}.json`
+		)
+			.then(response => response.json())
+			.then(data =>
+				runInAction(() => {
+					this.name = data.for;
+				})
+			)
+			.catch(error => {
+				console.warn(`Not found info for UUID ${service.uuid}`);
+				console.warn(error);
+			});
 	}
 
 	setCharacteristics = async (event: any) => {
