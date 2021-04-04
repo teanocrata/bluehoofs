@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/teanocrata/bluehoofs/compare/v0.1.4...v0.1.5) (2021-04-04)
+
+
+### Features
+
+* add info to characteristic ([282abb8](https://github.com/teanocrata/bluehoofs/commit/282abb80b9a1dab18a20816dcad47a07aeb41fe3))
+* add service info from bluetooth spec ([74fab79](https://github.com/teanocrata/bluehoofs/commit/74fab79fb9d0557cd9793770ba76638ae6965945))
+* allow to work with iTAG & other devices ([650ab8e](https://github.com/teanocrata/bluehoofs/commit/650ab8eb02c8bbc806fa65c6030b5b8d04282ace))
+
 ### [0.1.4](https://github.com/teanocrata/bluehoofs/compare/v0.1.3...v0.1.4) (2021-04-03)
 
 
