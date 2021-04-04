@@ -1,4 +1,5 @@
 import { observable, runInAction } from 'mobx';
+import { HoofBluetoothCharacteristic } from './HoofBluetoothCharacteristic';
 
 export class HoofBluetoothService {
 	private _service: BluetoothRemoteGATTService;
@@ -6,7 +7,7 @@ export class HoofBluetoothService {
 	uuid: BluetoothRemoteGATTService['uuid'];
 
 	@observable.ref
-	characteristics: Array<BluetoothRemoteGATTCharacteristic> | null = null;
+	characteristics: Array<HoofBluetoothCharacteristic> | null = null;
 	constructor(service: BluetoothRemoteGATTService) {
 		this._service = service;
 		this.name = service.uuid;
@@ -31,6 +32,11 @@ export class HoofBluetoothService {
 	setCharacteristics = async (event: any) => {
 		event.preventDefault();
 		const characteristics = await this._service.getCharacteristics();
-		runInAction(() => (this.characteristics = characteristics));
+		runInAction(
+			() =>
+				(this.characteristics = characteristics.map(
+					characteristic => new HoofBluetoothCharacteristic(characteristic)
+				))
+		);
 	};
 }

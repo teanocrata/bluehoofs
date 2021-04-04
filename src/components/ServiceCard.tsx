@@ -20,38 +20,50 @@ export default class ServiceCard extends React.Component<Props> {
 				{service.characteristics &&
 					service.characteristics.map(characteristic => (
 						<Card key={characteristic.uuid}>
-							<header>{characteristic.uuid}</header>
+							<header>{characteristic.name}</header>
 							<section>
 								<Switch
+									readOnly
 									label="broadcast"
 									checked={characteristic.properties.broadcast}
 								/>
-								<Switch label="read" checked={characteristic.properties.read} />
 								<Switch
+									readOnly
+									label="read"
+									checked={characteristic.properties.read}
+								/>
+								<Switch
+									readOnly
 									label="writeWithoutResponse"
 									checked={characteristic.properties.writeWithoutResponse}
 								/>
 								<Switch
+									readOnly
 									label="write"
 									checked={characteristic.properties.write}
 								/>
 								<Switch
+									readOnly
 									label="notify"
 									checked={characteristic.properties.notify}
 								/>
 								<Switch
+									readOnly
 									label="indicate"
 									checked={characteristic.properties.indicate}
 								/>
 								<Switch
+									readOnly
 									label="authenticatedSignedWrites"
 									checked={characteristic.properties.authenticatedSignedWrites}
 								/>
 								<Switch
+									readOnly
 									label="reliableWrite"
 									checked={characteristic.properties.reliableWrite}
 								/>
 								<Switch
+									readOnly
 									label="writableAuxiliaries"
 									checked={characteristic.properties.writableAuxiliaries}
 								/>
