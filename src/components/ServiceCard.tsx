@@ -12,11 +12,22 @@ interface Props {
 
 @observer
 export default class ServiceCard extends React.Component<Props> {
+	handleGetCharacteristics = (
+		event: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		event.preventDefault();
+		if (!this.props.service.characteristics) {
+			this.props.service.setCharacteristics();
+		}
+	};
 	render() {
 		const { service } = this.props;
 
 		return (
-			<Card interactive onClick={service.setCharacteristics}>
+			<Card
+				interactive={!service.characteristics}
+				onClick={this.handleGetCharacteristics}
+			>
 				{service.name}
 				{(service.characteristics || []).map(characteristic => (
 					<CharacteristicCard
