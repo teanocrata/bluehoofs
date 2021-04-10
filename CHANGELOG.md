@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/teanocrata/bluehoofs/compare/v0.1.5...v0.1.6) (2021-04-10)
+
+
+### Features
+
+* :sparkles: Allow to write to characteristic (works with iTag) ([3c8f956](https://github.com/teanocrata/bluehoofs/commit/3c8f956ea559b6fbbf5bba5b901e303397cd8bce))
+* :sparkles: Works with Alert Level characteristic ([b919a93](https://github.com/teanocrata/bluehoofs/commit/b919a933e267024c76991fdaf2972751e7c178d8))
+* Add profile service & characteristic for other iTags ([54c7d74](https://github.com/teanocrata/bluehoofs/commit/54c7d74c34e24b961f798e45188a697355cfa20c))
+
+
+### Bug Fixes
+
+* :goal_net: Cath errors when retrieving uuid info ([d5738ed](https://github.com/teanocrata/bluehoofs/commit/d5738edcaa5286db5cc7408103edb0858d17edc7))
+
 ### [0.1.5](https://github.com/teanocrata/bluehoofs/compare/v0.1.4...v0.1.5) (2021-04-04)
 
 
