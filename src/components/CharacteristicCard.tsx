@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Checkbox } from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, Checkbox } from '@blueprintjs/core';
 
 import { observer } from 'mobx-react';
 import { HoofBluetoothCharacteristic } from '../devices/HoofBluetoothCharacteristic';
@@ -29,7 +29,9 @@ export default class CharacteristicCard extends React.Component<Props> {
 		event.preventDefault();
 		try {
 			this.props.characteristic
-				.writeValue(Uint8Array.of(this.toggle ? 0 : 1))
+				.writeValueWithoutResponse(
+					Uint8Array.of(parseInt(event.currentTarget.id))
+				)
 				.then(() => runInAction(() => (this.toggle = !this.toggle)));
 		} catch (error) {
 			console.error(error);
@@ -41,7 +43,15 @@ export default class CharacteristicCard extends React.Component<Props> {
 
 		return (
 			<Card>
-				<header>{characteristic.name}</header>
+				<header>
+					<a
+						href={`https://teanocrata.github.io/ble-assigned-numbers/uuids/0x${characteristic.uuid
+							.slice(4, 8)
+							.toUpperCase()}.json`}
+					>
+						{characteristic.name}
+					</a>
+				</header>
 				<section>
 					<Checkbox
 						disabled
@@ -94,12 +104,22 @@ export default class CharacteristicCard extends React.Component<Props> {
 						<Button onClick={this.handleRead} text="Read" />
 					)}
 					<span>{this.data?.getInt8(0)}</span>
-					{characteristic.properties.write && (
-						<Button
-							onClick={this.handleToggle}
-							icon={this.toggle ? 'volume-up' : 'volume-off'}
-						/>
-					)}
+					<ButtonGroup>
+						{characteristic.alertLevels.map(({ value }) => (
+							<Button
+								id={`${value}`}
+								key={value}
+								onClick={this.handleToggle}
+								icon={
+									value === 0
+										? 'volume-off'
+										: value === 1
+										? 'volume-down'
+										: 'volume-up'
+								}
+							/>
+						))}
+					</ButtonGroup>
 				</footer>
 			</Card>
 		);

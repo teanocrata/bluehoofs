@@ -1,4 +1,4 @@
-import { action, observable, runInAction } from 'mobx';
+import { action, computed, observable, runInAction } from 'mobx';
 
 export class HoofBluetoothCharacteristic {
 	private _characteristic: BluetoothRemoteGATTCharacteristic;
@@ -8,8 +8,8 @@ export class HoofBluetoothCharacteristic {
 	readValue: BluetoothRemoteGATTCharacteristic['readValue'] = () =>
 		this._characteristic.readValue();
 
-	writeValue: BluetoothRemoteGATTCharacteristic['writeValue'] = value =>
-		this._characteristic.writeValue(value);
+	writeValueWithoutResponse: BluetoothRemoteGATTCharacteristic['writeValueWithoutResponse'] = value =>
+		this._characteristic.writeValueWithoutResponse(value);
 
 	@action updateCharacteristicValue = (event: Event) => {
 		this.value = (event?.target as any).value.getUint8(0);
@@ -48,5 +48,23 @@ export class HoofBluetoothCharacteristic {
 				console.warn(`Not found info for UUID ${characteristic.uuid}`);
 				console.warn(error);
 			});
+	}
+
+	@computed get alertLevels () {
+		if (this.name === 'Alert Level') {
+			return [{
+				value: 0x00,
+				label: 'No Alert'
+			},
+			{
+				value: 0x01,
+				label: 'Mild Alert'
+			},
+			{
+				value: 0x02,
+				label: 'High Alert'
+			}]
+		}
+		return []
 	}
 }
