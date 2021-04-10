@@ -17,7 +17,16 @@ export class HoofBluetoothService {
 				.slice(4, 8)
 				.toUpperCase()}.json`
 		)
-			.then(response => response.json())
+			.then(response => {
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+				const contentType = response.headers.get('content-type');
+				if (!contentType || !contentType.includes('application/json')) {
+					throw new TypeError("Oops, we haven't got JSON!");
+				}
+				return response.json();
+			})
 			.then(data =>
 				runInAction(() => {
 					this.name = data.for;

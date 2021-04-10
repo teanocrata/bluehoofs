@@ -24,21 +24,21 @@ export class HoofBluetoothCharacteristic {
 		this.name = characteristic.uuid;
 		this.uuid = characteristic.uuid;
 		this.properties = characteristic.properties;
-		if (this.properties.notify) {
-			this._characteristic.startNotifications().then(_ => {
-				console.log('> Notifications started');
-				this._characteristic.addEventListener(
-					'characteristicvaluechanged',
-					console.log
-				);
-			});
-		}
 		fetch(
 			`https://teanocrata.github.io/ble-assigned-numbers/uuids/0x${characteristic.uuid
 				.slice(4, 8)
 				.toUpperCase()}.json`
 		)
-			.then(response => response.json())
+			.then(response => {
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+				const contentType = response.headers.get('content-type');
+				if (!contentType || !contentType.includes('application/json')) {
+					throw new TypeError("Oops, we haven't got JSON!");
+				}
+				return response.json();
+			})
 			.then(data =>
 				runInAction(() => {
 					this.name = data.for;
