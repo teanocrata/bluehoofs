@@ -29,8 +29,7 @@ export class HoofBluetoothService {
 			});
 	}
 
-	setCharacteristics = async (event: any) => {
-		event.preventDefault();
+	setCharacteristics = async () => {
 		const characteristics = await this._service.getCharacteristics();
 		runInAction(
 			() =>

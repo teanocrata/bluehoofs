@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Button, Card, Switch } from '@blueprintjs/core';
+import { Button, Card, Checkbox } from '@blueprintjs/core';
 
 import { observer } from 'mobx-react';
 import { HoofBluetoothCharacteristic } from '../devices/HoofBluetoothCharacteristic';
+import { observable, runInAction } from 'mobx';
 
 interface Props {
 	characteristic: HoofBluetoothCharacteristic;
@@ -11,6 +12,30 @@ interface Props {
 
 @observer
 export default class CharacteristicCard extends React.Component<Props> {
+	@observable data?: DataView;
+	@observable toggle: boolean = false;
+
+	handleRead = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		event.preventDefault();
+		try {
+			const data = await this.props.characteristic.readValue();
+			runInAction(() => (this.data = data));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	handleToggle = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		event.preventDefault();
+		try {
+			this.props.characteristic
+				.writeValue(Uint8Array.of(this.toggle ? 0 : 1))
+				.then(() => runInAction(() => (this.toggle = !this.toggle)));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	render() {
 		const { characteristic } = this.props;
 
@@ -18,54 +43,63 @@ export default class CharacteristicCard extends React.Component<Props> {
 			<Card>
 				<header>{characteristic.name}</header>
 				<section>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="broadcast"
 						checked={characteristic.properties.broadcast}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="read"
 						checked={characteristic.properties.read}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="writeWithoutResponse"
 						checked={characteristic.properties.writeWithoutResponse}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="write"
 						checked={characteristic.properties.write}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="notify"
 						checked={characteristic.properties.notify}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="indicate"
 						checked={characteristic.properties.indicate}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="authenticatedSignedWrites"
 						checked={characteristic.properties.authenticatedSignedWrites}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="reliableWrite"
 						checked={characteristic.properties.reliableWrite}
 					/>
-					<Switch
-						readOnly
+					<Checkbox
+						disabled
 						label="writableAuxiliaries"
 						checked={characteristic.properties.writableAuxiliaries}
 					/>
 				</section>
 				<footer>
-					<Button onClick={() => console.log(characteristic)} text="Log" />
+					{characteristic.properties.read && (
+						<Button onClick={this.handleRead} text="Read" />
+					)}
+					<span>{this.data?.getInt8(0)}</span>
+					{characteristic.properties.write && (
+						<Button
+							onClick={this.handleToggle}
+							icon={this.toggle ? 'volume-up' : 'volume-off'}
+						/>
+					)}
 				</footer>
 			</Card>
 		);
