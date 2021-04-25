@@ -4,10 +4,6 @@ import { observer } from 'mobx-react';
 import { HoofBluetoothCharacteristic } from '../devices/HoofBluetoothCharacteristic';
 import { observable, runInAction } from 'mobx';
 
-import '@rmwc/icon-button/styles';
-import '@rmwc/button/styles';
-import '@rmwc/list/styles';
-
 import { Button } from '@rmwc/button';
 import { Card, CardActionIcon, CardActionIcons, CardActions } from '@rmwc/card';
 import { List, ListItem, ListItemPrimaryText, ListItemText } from '@rmwc/list';

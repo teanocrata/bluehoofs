@@ -4,10 +4,6 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import Configuration from '../components/Configuration';
 
-import '@rmwc/chip/styles';
-import '@rmwc/top-app-bar/styles';
-import '@rmwc/snackbar/styles';
-
 import './App.css';
 
 import { Chip, ChipOnInteractionEventT } from '@rmwc/chip';

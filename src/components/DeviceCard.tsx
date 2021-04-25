@@ -12,7 +12,6 @@ import {
 	CardPrimaryAction,
 } from '@rmwc/card';
 
-import '@rmwc/typography/styles';
 import { Typography } from '@rmwc/typography';
 interface Props {
 	device: MiBluetoothDevice;

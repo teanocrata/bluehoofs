@@ -5,10 +5,22 @@ import App from './containers/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+import '@rmwc/chip/styles';
+import '@rmwc/top-app-bar/styles';
+import '@rmwc/snackbar/styles';
+import '@rmwc/icon-button/styles';
+import '@rmwc/button/styles';
+import '@rmwc/list/styles';
+import '@rmwc/fab/styles';
+import '@rmwc/typography/styles';
+import '@rmwc/card/styles';
+
+import { RMWCProvider } from '@rmwc/provider';
+
 ReactDOM.render(
-	<React.StrictMode>
+	<RMWCProvider>
 		<App />
-	</React.StrictMode>,
+	</RMWCProvider>,
 	document.getElementById('root')
 );
 

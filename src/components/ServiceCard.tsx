@@ -1,7 +1,5 @@
 import React from 'react';
 
-import '@rmwc/card/styles';
-
 import { observer } from 'mobx-react';
 import { HoofBluetoothService } from '../devices/HoofBluetoothService';
 import CharacteristicCard from './CharacteristicCard';

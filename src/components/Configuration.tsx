@@ -10,7 +10,6 @@ import { iTagBluetoothDevice } from '../devices/iTagBluetoothDevice';
 import css from './Configuration.module.css';
 import { GenericBluetoothDevice } from '../devices/GenericBluetoothDevice';
 import { Fab } from '@rmwc/fab';
-import '@rmwc/fab/styles';
 
 @observer
 export default class Configuration extends React.Component {

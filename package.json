@@ -21,6 +21,7 @@
 		"@rmwc/fab": "^6.1.4",
 		"@rmwc/icon-button": "^6.1.4",
 		"@rmwc/list": "^6.1.4",
+		"@rmwc/provider": "^6.1.4",
 		"@rmwc/snackbar": "^6.1.4",
 		"@rmwc/top-app-bar": "^6.1.4",
 		"@rmwc/typography": "^6.1.4",
