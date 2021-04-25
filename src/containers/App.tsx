@@ -1,15 +1,22 @@
 import React from 'react';
 
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Navbar, Tag } from '@blueprintjs/core';
 
 import Configuration from '../components/Configuration';
 
-import styles from './App.module.css';
+import '@rmwc/chip/styles';
+import '@rmwc/top-app-bar/styles';
+import '@rmwc/snackbar/styles';
+
 import './App.css';
 
+import { Chip, ChipOnInteractionEventT } from '@rmwc/chip';
+import { SimpleTopAppBar, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
+import { SnackbarQueue } from '@rmwc/snackbar';
+import { messages } from '../notificationsQueue';
+
 function App() {
-	const openTag = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+	const openTag = (_e: ChipOnInteractionEventT) =>
 		window.open(
 			`https://github.com/teanocrata/bluehoofs/releases/tag/v${process.env.REACT_APP_VERSION}`
 		);
@@ -20,17 +27,15 @@ function App() {
 				<title>Blue hoofs</title>
 				<meta name="description" content="Mi band 2 for hoofs friends" />
 			</Helmet>
+			<SimpleTopAppBar
+				title="Blue hoofs"
+				endContent={
+					<Chip onInteraction={openTag} label={process.env.REACT_APP_VERSION} />
+				}
+			/>
+			<TopAppBarFixedAdjust />
 			<Configuration />
-			<Navbar fixedToTop className={styles.toBottom}>
-				<Navbar.Group align="center" className={styles.center}>
-					<Navbar.Heading>
-						Blue hoofs{' '}
-						<Tag interactive onClick={openTag}>
-							{process.env.REACT_APP_VERSION}
-						</Tag>
-					</Navbar.Heading>
-				</Navbar.Group>
-			</Navbar>
+			<SnackbarQueue messages={messages} />
 		</HelmetProvider>
 	);
 }

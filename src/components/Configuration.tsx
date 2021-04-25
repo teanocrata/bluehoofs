@@ -3,14 +3,14 @@ import React, { ReactElement } from 'react';
 import { observer } from 'mobx-react';
 import { observable, ObservableMap, runInAction, action } from 'mobx';
 
-import { Button, Icon, NonIdealState } from '@blueprintjs/core';
-
 import DeviceCard from './DeviceCard';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 import { iTagBluetoothDevice } from '../devices/iTagBluetoothDevice';
 
 import css from './Configuration.module.css';
 import { GenericBluetoothDevice } from '../devices/GenericBluetoothDevice';
+import { Fab } from '@rmwc/fab';
+import '@rmwc/fab/styles';
 
 @observer
 export default class Configuration extends React.Component {
@@ -94,18 +94,7 @@ export default class Configuration extends React.Component {
 		return (
 			<div className={css.configuration}>
 				<div className={css.devices}>{devices}</div>
-				{this.bluetoothAvailable ? (
-					<Button
-						className={css.addButton}
-						fill
-						minimal
-						onClick={this.addDevice}
-					>
-						<Icon icon="add" iconSize={100} intent="primary" />
-					</Button>
-				) : (
-					<NonIdealState icon="offline" title="Bluetooth is not available" />
-				)}
+				<Fab icon="add" onClick={this.addDevice} />
 			</div>
 		);
 	}

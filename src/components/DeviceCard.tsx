@@ -1,13 +1,19 @@
 import React from 'react';
 
-import { Button, Card, IActionProps, Switch } from '@blueprintjs/core';
-import { MdBluetooth, MdBluetoothConnected } from 'react-icons/md';
-
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 import ServiceCard from './ServiceCard';
+import {
+	Card,
+	CardActionIcon,
+	CardActionIcons,
+	CardActions,
+	CardPrimaryAction,
+} from '@rmwc/card';
 
+import '@rmwc/typography/styles';
+import { Typography } from '@rmwc/typography';
 interface Props {
 	device: MiBluetoothDevice;
 	onRemove: (device: MiBluetoothDevice) => void;
@@ -28,31 +34,32 @@ export default class DeviceCard extends React.Component<Props> {
 		}
 	};
 
-	handleScan = () => {
-		this.props.device.scan();
-	};
-
-	handleRemove: IActionProps['onClick'] = event =>
-		this.props.onRemove(this.props.device);
+	handleRemove = () => this.props.onRemove(this.props.device);
 
 	render() {
 		const { device } = this.props;
 
 		return (
 			<Card>
-				<Button icon="cross" onClick={this.handleRemove} />
-				<h5>{device.name}</h5>
-				{device.gatt ? <MdBluetoothConnected /> : <MdBluetooth />}
-				<Switch
-					disabled={this.connecting}
-					checked={device.gatt !== null}
-					onChange={this.handleToggleConnect}
-				/>
-				<Button disabled={!device.gatt} onClick={this.handleScan} text="Scan" />
-				{device.primaryServices &&
-					device.primaryServices.map(service => (
-						<ServiceCard key={service.uuid} service={service} />
-					))}
+				<CardPrimaryAction>
+					<Typography use="headline6" tag="h2">
+						{device.name}
+					</Typography>
+					{device.primaryServices &&
+						device.primaryServices.map(service => (
+							<ServiceCard key={service.uuid} service={service} />
+						))}
+				</CardPrimaryAction>
+				<CardActions>
+					<CardActionIcons>
+						<CardActionIcon
+							icon="bluetooth"
+							onIcon="bluetooth_connected"
+							onClick={this.handleToggleConnect}
+						/>
+						<CardActionIcon icon="delete" onClick={this.handleRemove} />
+					</CardActionIcons>
+				</CardActions>
 			</Card>
 		);
 	}

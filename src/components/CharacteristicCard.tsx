@@ -1,10 +1,16 @@
 import React from 'react';
 
-import { Button, ButtonGroup, Card, Checkbox } from '@blueprintjs/core';
-
 import { observer } from 'mobx-react';
 import { HoofBluetoothCharacteristic } from '../devices/HoofBluetoothCharacteristic';
 import { observable, runInAction } from 'mobx';
+
+import '@rmwc/icon-button/styles';
+import '@rmwc/button/styles';
+import '@rmwc/list/styles';
+
+import { Button } from '@rmwc/button';
+import { Card, CardActionIcon, CardActionIcons, CardActions } from '@rmwc/card';
+import { List, ListItem, ListItemPrimaryText, ListItemText } from '@rmwc/list';
 
 interface Props {
 	characteristic: HoofBluetoothCharacteristic;
@@ -52,75 +58,79 @@ export default class CharacteristicCard extends React.Component<Props> {
 						{characteristic.name}
 					</a>
 				</header>
-				<section>
-					<Checkbox
-						disabled
-						label="broadcast"
-						checked={characteristic.properties.broadcast}
-					/>
-					<Checkbox
-						disabled
-						label="read"
-						checked={characteristic.properties.read}
-					/>
-					<Checkbox
-						disabled
-						label="writeWithoutResponse"
-						checked={characteristic.properties.writeWithoutResponse}
-					/>
-					<Checkbox
-						disabled
-						label="write"
-						checked={characteristic.properties.write}
-					/>
-					<Checkbox
-						disabled
-						label="notify"
-						checked={characteristic.properties.notify}
-					/>
-					<Checkbox
-						disabled
-						label="indicate"
-						checked={characteristic.properties.indicate}
-					/>
-					<Checkbox
-						disabled
-						label="authenticatedSignedWrites"
-						checked={characteristic.properties.authenticatedSignedWrites}
-					/>
-					<Checkbox
-						disabled
-						label="reliableWrite"
-						checked={characteristic.properties.reliableWrite}
-					/>
-					<Checkbox
-						disabled
-						label="writableAuxiliaries"
-						checked={characteristic.properties.writableAuxiliaries}
-					/>
-				</section>
-				<footer>
+				<List>
+					<ListItem activated={characteristic.properties.broadcast}>
+						<ListItemText>
+							<ListItemPrimaryText>broadcast</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.read}>
+						<ListItemText>
+							<ListItemPrimaryText>read</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.writeWithoutResponse}>
+						<ListItemText>
+							<ListItemPrimaryText>writeWithoutResponse</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.write}>
+						<ListItemText>
+							<ListItemPrimaryText>write</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.notify}>
+						<ListItemText>
+							<ListItemPrimaryText>notify</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.indicate}>
+						<ListItemText>
+							<ListItemPrimaryText>indicate</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem
+						activated={characteristic.properties.authenticatedSignedWrites}
+					>
+						<ListItemText>
+							<ListItemPrimaryText>
+								authenticatedSignedWrites
+							</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.reliableWrite}>
+						<ListItemText>
+							<ListItemPrimaryText>reliableWrite</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+					<ListItem activated={characteristic.properties.writableAuxiliaries}>
+						<ListItemText>
+							<ListItemPrimaryText>writableAuxiliaries</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				</List>
+				<CardActions>
 					{characteristic.properties.read && (
-						<Button onClick={this.handleRead} text="Read" />
+						<Button onClick={this.handleRead} label="Read" />
 					)}
 					<span>{this.data?.getInt8(0)}</span>
-					<ButtonGroup>
+					<CardActionIcons>
 						{characteristic.alertLevels.map(({ value }) => (
-							<Button
+							<CardActionIcon
 								id={`${value}`}
 								key={value}
 								onClick={this.handleToggle}
 								icon={
 									value === 0
-										? 'volume-off'
+										? 'volume_off'
 										: value === 1
-										? 'volume-down'
-										: 'volume-up'
+										? 'volume_down'
+										: 'volume_up'
 								}
 							/>
 						))}
-					</ButtonGroup>
-				</footer>
+					</CardActionIcons>
+				</CardActions>
 			</Card>
 		);
 	}

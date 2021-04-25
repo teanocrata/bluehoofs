@@ -1,5 +1,5 @@
-import { Toaster } from '@blueprintjs/core';
 import { observable, action } from 'mobx';
+import { notify } from '../notificationsQueue';
 import { HoofBluetoothService } from './HoofBluetoothService';
 
 export abstract class HoofBluetoothDevice {
@@ -32,9 +32,9 @@ export abstract class HoofBluetoothDevice {
 			services?.map(service => new HoofBluetoothService(service)) || null);
 
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
-		Toaster.create().show({
-			message: `${(event.target as BluetoothDevice).name} disconected`,
-			intent: 'danger',
+		notify({
+			body: `${(event.target as BluetoothDevice).name} disconected`,
+			icon: 'warning'
 		});
 		this.setServer(null);
 	};
@@ -61,78 +61,7 @@ export abstract class HoofBluetoothDevice {
 			console.error(error);
 		}
 	};
-
-	scan = async () => {
-		const primaryServices =
-			(await this._device.gatt?.getPrimaryServices()) || [];
-
-		const info = await Promise.all(
-			primaryServices!.map(async service => {
-				try {
-					const characteristics = await Promise.all(
-						((await service?.getCharacteristics()) || []).map(
-							async characteristic => {
-								let descriptorsInfo: Array<{
-									uuid: string;
-									type: string;
-									value: string | undefined;
-									readedValue: string;
-									characteristicuuid: string;
-								}> = [];
-								try {
-									const descriptors = await characteristic.getDescriptors();
-									descriptorsInfo = await Promise.all(
-										descriptors.map(async descriptor => ({
-											uuid: descriptor.uuid,
-											type: 'descriptor',
-											value:
-												descriptor.value &&
-												new TextDecoder().decode(descriptor.value),
-											readedValue: new TextDecoder().decode(
-												await descriptor.readValue()
-											),
-											characteristicuuid: descriptor.characteristic.uuid,
-										}))
-									);
-								} catch (error) {
-									console.error(error);
-								}
-
-								return {
-									uuid: characteristic.uuid,
-									type: 'characteristic',
-									value:
-										characteristic.value &&
-										new TextDecoder().decode(characteristic.value),
-									readedValue: new TextDecoder().decode(
-										await characteristic.readValue()
-									),
-									descriptorsInfo,
-									properties: characteristic.properties,
-									serviceuuid: characteristic.service?.uuid,
-								};
-							}
-						)
-					);
-					return {
-						uuid: service?.uuid,
-						characteristics,
-						primary: service?.isPrimary,
-						device: service?.device,
-					};
-				} catch (error) {
-					console.error(error);
-					return {
-						uuid: service?.uuid,
-						error: { ...error, message: error.message },
-					};
-				}
-			})
-		);
-		this.setInfo(info);
-		return info;
-	};
-
+	
 	disconnect = () => {
 		this._device.gatt?.disconnect();
 	};

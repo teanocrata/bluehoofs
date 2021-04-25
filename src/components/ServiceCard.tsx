@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Card } from '@blueprintjs/core';
+import '@rmwc/card/styles';
 
 import { observer } from 'mobx-react';
 import { HoofBluetoothService } from '../devices/HoofBluetoothService';
 import CharacteristicCard from './CharacteristicCard';
+import { Card, CardPrimaryAction } from '@rmwc/card';
 
 interface Props {
 	service: HoofBluetoothService;
@@ -12,29 +13,23 @@ interface Props {
 
 @observer
 export default class ServiceCard extends React.Component<Props> {
-	handleGetCharacteristics = (
-		event: React.MouseEvent<HTMLDivElement, MouseEvent>
-	) => {
-		event.preventDefault();
-		if (!this.props.service.characteristics) {
-			this.props.service.setCharacteristics();
-		}
-	};
+	componentDidMount() {
+		this.props.service.setCharacteristics();
+	}
 	render() {
 		const { service } = this.props;
 
 		return (
-			<Card
-				interactive={!service.characteristics}
-				onClick={this.handleGetCharacteristics}
-			>
-				{service.name}
-				{(service.characteristics || []).map(characteristic => (
-					<CharacteristicCard
-						key={characteristic.uuid}
-						characteristic={characteristic}
-					/>
-				))}
+			<Card style={{ width: '21rem' }}>
+				<CardPrimaryAction>
+					{service.name}
+					{(service.characteristics || []).map(characteristic => (
+						<CharacteristicCard
+							key={characteristic.uuid}
+							characteristic={characteristic}
+						/>
+					))}
+				</CardPrimaryAction>
 			</Card>
 		);
 	}
