@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/teanocrata/bluehoofs/compare/v0.1.10...v0.1.11) (2021-04-25)
+
+
+### Features
+
+* :sparkles: Add section ([38fa545](https://github.com/teanocrata/bluehoofs/commit/38fa545d8359e85848a5a8fe0be8f2af2cf61cbf))
+* :sparkles: Sign in ([3b70012](https://github.com/teanocrata/bluehoofs/commit/3b700127c8974731339a43fe2bc2b26eaff5ad28))
+
 ### [0.1.10](https://github.com/teanocrata/bluehoofs/compare/v0.1.9...v0.1.10) (2021-04-25)
 
 
