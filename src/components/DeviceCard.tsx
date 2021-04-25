@@ -13,6 +13,8 @@ import {
 } from '@rmwc/card';
 
 import { Typography } from '@rmwc/typography';
+
+import css from './DeviceCard.module.css';
 interface Props {
 	device: MiBluetoothDevice;
 	onRemove: (device: MiBluetoothDevice) => void;
@@ -41,13 +43,15 @@ export default class DeviceCard extends React.Component<Props> {
 		return (
 			<Card>
 				<CardPrimaryAction>
-					<Typography use="headline6" tag="h2">
-						{device.name}
-					</Typography>
-					{device.primaryServices &&
-						device.primaryServices.map(service => (
-							<ServiceCard key={service.uuid} service={service} />
-						))}
+					<div className={css.content}>
+						<Typography use="headline6" tag="h2">
+							{device.name}
+						</Typography>
+						{device.primaryServices &&
+							device.primaryServices.map(service => (
+								<ServiceCard key={service.uuid} service={service} />
+							))}
+					</div>
 				</CardPrimaryAction>
 				<CardActions>
 					<CardActionIcons>
