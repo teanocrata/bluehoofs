@@ -15,6 +15,7 @@
 		"type": "git"
 	},
 	"dependencies": {
+		"@rmwc/avatar": "^6.1.4",
 		"@rmwc/button": "^6.1.4",
 		"@rmwc/card": "^6.1.4",
 		"@rmwc/chip": "^6.1.4",

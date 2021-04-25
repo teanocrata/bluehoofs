@@ -11,11 +11,12 @@ import { Chip, ChipOnInteractionEventT } from '@rmwc/chip';
 import { ThemeProvider } from '@rmwc/theme';
 import { SimpleTopAppBar, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
 import { SnackbarQueue } from '@rmwc/snackbar';
-import { messages } from '../notificationsQueue';
-import { action, observable } from 'mobx';
+import { messages, notify } from '../notificationsQueue';
+import { action, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
+import { Avatar } from '@rmwc/avatar';
 
 const darkThemeOptions = {
 	primary: '#24aee9',
@@ -46,6 +47,16 @@ const darkThemeOptions = {
 
 type Section = 'settings' | 'main';
 
+declare var google: {
+	accounts: {
+		id: {
+			initialize: (config: any) => void;
+			prompt: (callback: (notification: any) => void) => void;
+			revoke: (email: string, callback: (done: any) => void) => void;
+		};
+	};
+};
+
 @observer
 export default class App extends React.Component {
 	@observable theme: 'dark' | 'baseline' = 'baseline';
@@ -58,6 +69,40 @@ export default class App extends React.Component {
 
 	@observable section: Section = 'settings';
 	@action setSection = (section: Section) => (this.section = section);
+
+	@observable user: { [key: string]: string | boolean | number } | null = null;
+
+	login = () => {
+		if (!this.user) {
+			google.accounts.id.initialize({
+				client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+				context: 'use',
+				nonce: '',
+				auto_select: 'true',
+				callback: (response: any) =>
+					runInAction(() => {
+						this.user = parseJwt(response.credential);
+					}),
+			});
+			google.accounts.id.prompt(notification => {
+				if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+					notify({
+						body: 'Oooops, something went wrong...',
+						icon: 'warning',
+					});
+				}
+			});
+		} else {
+			google.accounts.id.revoke(this.user.email as string, _done => {
+				notify({
+					body: 'Revoked',
+				});
+				runInAction(() => {
+					this.user = null;
+				});
+			});
+		}
+	};
 
 	openTag = (_e: ChipOnInteractionEventT) =>
 		window.open(
@@ -92,6 +137,15 @@ export default class App extends React.Component {
 								onIcon: 'light_mode',
 								onClick: this.toggleMode,
 							},
+							{
+								icon: 'account_circle',
+								onIcon: (
+									<Avatar
+										src={this.user ? (this.user.picture as string) : undefined}
+									/>
+								),
+								onClick: this.login,
+							},
 						]}
 					/>
 					<TopAppBarFixedAdjust />
@@ -121,4 +175,19 @@ export default class App extends React.Component {
 			</HelmetProvider>
 		);
 	}
+}
+
+function parseJwt(token: string) {
+	var base64Url = token.split('.')[1];
+	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	var jsonPayload = decodeURIComponent(
+		atob(base64)
+			.split('')
+			.map(function (c) {
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			})
+			.join('')
+	);
+
+	return JSON.parse(jsonPayload);
 }
