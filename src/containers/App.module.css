@@ -1,0 +1,4 @@
+.app {
+	background: var(--mdc-theme-background);
+	height: 100rem;
+}
