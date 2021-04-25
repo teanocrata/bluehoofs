@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/teanocrata/bluehoofs/compare/v0.1.8...v0.1.9) (2021-04-25)
+
+
+### Features
+
+* :sparkles: Add dark mode ([bf91be6](https://github.com/teanocrata/bluehoofs/commit/bf91be666a60c8e2b824d7197a376791cf3951a8))
+
 ### [0.1.8](https://github.com/teanocrata/bluehoofs/compare/v0.1.7...v0.1.8) (2021-04-25)
 
 ### [0.1.7](https://github.com/teanocrata/bluehoofs/compare/v0.1.6...v0.1.7) (2021-04-25)
