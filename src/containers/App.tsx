@@ -14,6 +14,8 @@ import { SnackbarQueue } from '@rmwc/snackbar';
 import { messages } from '../notificationsQueue';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { Drawer, DrawerContent } from '@rmwc/drawer';
+import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 
 const darkThemeOptions = {
 	primary: '#24aee9',
@@ -42,11 +44,21 @@ const darkThemeOptions = {
 	textIconOnDark: 'rgba(255, 255, 255, 0.5)',
 };
 
+type Section = 'settings' | 'main';
+
 @observer
 export default class App extends React.Component {
 	@observable theme: 'dark' | 'baseline' = 'baseline';
 	@action toggleMode = () =>
 		(this.theme = this.theme === 'dark' ? 'baseline' : 'dark');
+
+	@observable isMenuOpen: boolean = false;
+	@action openMenu = () => (this.isMenuOpen = true);
+	@action closeMenu = () => (this.isMenuOpen = false);
+
+	@observable section: Section = 'settings';
+	@action setSection = (section: Section) => (this.section = section);
+
 	openTag = (_e: ChipOnInteractionEventT) =>
 		window.open(
 			`https://github.com/teanocrata/bluehoofs/releases/tag/v${process.env.REACT_APP_VERSION}`
@@ -66,6 +78,8 @@ export default class App extends React.Component {
 					<SimpleTopAppBar
 						fixed
 						title="Blue hoofs"
+						navigationIcon
+						onNav={this.openMenu}
 						endContent={
 							<Chip
 								onInteraction={this.openTag}
@@ -81,7 +95,27 @@ export default class App extends React.Component {
 						]}
 					/>
 					<TopAppBarFixedAdjust />
-					<Configuration />
+					<Drawer modal open={this.isMenuOpen} onClose={this.closeMenu}>
+						<DrawerContent>
+							<List>
+								<ListItem
+									activated={this.section === 'main'}
+									onClick={() => this.setSection('main')}
+								>
+									<ListItemGraphic />
+									<ListItemText>Main</ListItemText>
+								</ListItem>
+								<ListItem
+									activated={this.section === 'settings'}
+									onClick={() => this.setSection('settings')}
+								>
+									<ListItemGraphic icon="settings" />
+									<ListItemText>Settings</ListItemText>
+								</ListItem>
+							</List>
+						</DrawerContent>
+					</Drawer>
+					{this.section === 'settings' && <Configuration />}
 					<SnackbarQueue messages={messages} />
 				</ThemeProvider>
 			</HelmetProvider>

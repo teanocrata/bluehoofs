@@ -18,6 +18,7 @@
 		"@rmwc/button": "^6.1.4",
 		"@rmwc/card": "^6.1.4",
 		"@rmwc/chip": "^6.1.4",
+		"@rmwc/drawer": "^6.1.4",
 		"@rmwc/fab": "^6.1.4",
 		"@rmwc/icon-button": "^6.1.4",
 		"@rmwc/list": "^6.1.4",

@@ -14,6 +14,7 @@ import '@rmwc/list/styles';
 import '@rmwc/fab/styles';
 import '@rmwc/typography/styles';
 import '@rmwc/card/styles';
+import '@rmwc/drawer/styles';
 
 import { RMWCProvider } from '@rmwc/provider';
 
