@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { notify } from '../notificationsQueue';
 import { HoofBluetoothService } from './HoofBluetoothService';
 
@@ -7,25 +7,33 @@ export abstract class HoofBluetoothDevice {
 	id: BluetoothDevice['id'];
 	name: BluetoothDevice['name'];
 
-	@observable.ref gatt: BluetoothRemoteGATTServer | null = null;
-	@observable.ref
+	gatt: BluetoothRemoteGATTServer | null = null;
 	primaryServices: Array<HoofBluetoothService> | null = null;
 	constructor(device: BluetoothDevice) {
-		this._device = device;
-		this.id = device.id;
-		this.name = device.name;
-		device.addEventListener('gattserverdisconnected', this.onDisconnected);
-	}
-	@observable info: any | null = null;
+        makeObservable(this, {
+            gatt: observable.ref,
+            primaryServices: observable.ref,
+            info: observable,
+            setServer: action,
+            setInfo: action,
+            setPrimaryServices: action
+        });
 
-	@action setServer = (gattServer: BluetoothRemoteGATTServer | null) => {
+        this._device = device;
+        this.id = device.id;
+        this.name = device.name;
+        device.addEventListener('gattserverdisconnected', this.onDisconnected);
+    }
+	info: any | null = null;
+
+	setServer = (gattServer: BluetoothRemoteGATTServer | null) => {
 		this.gatt = gattServer;
 		this.setPrimaryServices(null);
 	};
 
-	@action setInfo = (info: any) => (this.info = info);
+	setInfo = (info: any) => (this.info = info);
 
-	@action setPrimaryServices = (
+	setPrimaryServices = (
 		services: Array<BluetoothRemoteGATTService> | null
 	) =>
 		(this.primaryServices =

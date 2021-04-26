@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import { App } from './App';
 
 test('renders nav bar with blue hoofs heading', () => {
 	const { getByText } = render(<App />);

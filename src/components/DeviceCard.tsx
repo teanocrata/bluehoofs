@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
-import ServiceCard from './ServiceCard';
+import { ServiceCard } from './ServiceCard';
 import {
 	Card,
 	CardActionIcon,
@@ -20,50 +20,60 @@ interface Props {
 	onRemove: (device: MiBluetoothDevice) => void;
 }
 
-@observer
-export default class DeviceCard extends React.Component<Props> {
-	@observable connecting: boolean = false;
+export const DeviceCard = observer(
+	class DeviceCard extends React.Component<Props> {
+		connecting: boolean = false;
 
-	@action toggleConnecting = () => (this.connecting = !this.connecting);
+		toggleConnecting = () => (this.connecting = !this.connecting);
 
-	handleToggleConnect = () => {
-		if (this.props.device.gatt) {
-			this.props.device.disconnect();
-		} else {
-			this.toggleConnecting();
-			this.props.device.connect().then(this.toggleConnecting);
+		handleToggleConnect = () => {
+			if (this.props.device.gatt) {
+				this.props.device.disconnect();
+			} else {
+				this.toggleConnecting();
+				this.props.device.connect().then(this.toggleConnecting);
+			}
+		};
+
+		handleRemove = () => this.props.onRemove(this.props.device);
+
+		constructor(props: Props) {
+			super(props);
+
+			makeObservable(this, {
+				connecting: observable,
+				toggleConnecting: action,
+			});
 		}
-	};
 
-	handleRemove = () => this.props.onRemove(this.props.device);
+		render() {
+			const { device } = this.props;
 
-	render() {
-		const { device } = this.props;
-
-		return (
-			<Card>
-				<CardPrimaryAction>
-					<div className={css.content}>
-						<Typography use="headline6" tag="h2">
-							{device.name}
-						</Typography>
-						{device.primaryServices &&
-							device.primaryServices.map(service => (
-								<ServiceCard key={service.uuid} service={service} />
-							))}
-					</div>
-				</CardPrimaryAction>
-				<CardActions>
-					<CardActionIcons>
-						<CardActionIcon
-							icon="bluetooth"
-							onIcon="bluetooth_connected"
-							onClick={this.handleToggleConnect}
-						/>
-						<CardActionIcon icon="delete" onClick={this.handleRemove} />
-					</CardActionIcons>
-				</CardActions>
-			</Card>
-		);
+			return (
+				<Card>
+					<CardPrimaryAction>
+						<div className={css.content}>
+							<Typography use="headline6" tag="h2">
+								{device.name}
+							</Typography>
+							{device.primaryServices &&
+								device.primaryServices.map(service => (
+									<ServiceCard key={service.uuid} service={service} />
+								))}
+						</div>
+					</CardPrimaryAction>
+					<CardActions>
+						<CardActionIcons>
+							<CardActionIcon
+								icon="bluetooth"
+								onIcon="bluetooth_connected"
+								onClick={this.handleToggleConnect}
+							/>
+							<CardActionIcon icon="delete" onClick={this.handleRemove} />
+						</CardActionIcons>
+					</CardActions>
+				</Card>
+			);
+		}
 	}
-}
+);

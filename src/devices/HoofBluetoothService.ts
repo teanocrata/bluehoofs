@@ -1,18 +1,22 @@
-import { observable, runInAction } from 'mobx';
+import { observable, runInAction, makeObservable } from 'mobx';
 import { HoofBluetoothCharacteristic } from './HoofBluetoothCharacteristic';
 
 export class HoofBluetoothService {
 	private _service: BluetoothRemoteGATTService;
-	@observable name: string;
+	name: string;
 	uuid: BluetoothRemoteGATTService['uuid'];
 
-	@observable.ref
 	characteristics: Array<HoofBluetoothCharacteristic> | null = null;
 	constructor(service: BluetoothRemoteGATTService) {
-		this._service = service;
-		this.name = service.uuid;
-		this.uuid = service.uuid;
-		fetch(
+        makeObservable(this, {
+            name: observable,
+            characteristics: observable.ref
+        });
+
+        this._service = service;
+        this.name = service.uuid;
+        this.uuid = service.uuid;
+        fetch(
 			`https://teanocrata.github.io/ble-assigned-numbers/uuids/0x${service.uuid
 				.slice(4, 8)
 				.toUpperCase()}.json`
@@ -36,7 +40,7 @@ export class HoofBluetoothService {
 				console.warn(`Not found info for UUID ${service.uuid}`);
 				console.warn(error);
 			});
-	}
+    }
 
 	setCharacteristics = async () => {
 		const characteristics = await this._service.getCharacteristics();
