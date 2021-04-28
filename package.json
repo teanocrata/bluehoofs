@@ -63,6 +63,12 @@
 		"git-cz": "git-cz",
 		"release": "cross-env standard-version"
 	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
 	"browserslist": {
 		"production": [
 			">0.2%",
