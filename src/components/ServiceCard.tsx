@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { HoofBluetoothService } from '../devices/HoofBluetoothService';
 import { CharacteristicCard } from './CharacteristicCard';
 import { Card, CardPrimaryAction } from '@rmwc/card';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { HoofBluetoothCharacteristic } from '../devices/HoofBluetoothCharacteristic';
 import { runInAction } from 'mobx';
 

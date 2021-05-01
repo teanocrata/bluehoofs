@@ -13,7 +13,7 @@ import { SimpleTopAppBar, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
 import { SnackbarQueue } from '@rmwc/snackbar';
 import { messages, notify } from '../notificationsQueue';
 import { ObservableMap } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 import { Avatar } from '@rmwc/avatar';

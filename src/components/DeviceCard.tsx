@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
 import { ServiceCard } from './ServiceCard';
 import {
