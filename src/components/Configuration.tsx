@@ -1,13 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { observer } from 'mobx-react';
-import {
-	observable,
-	ObservableMap,
-	runInAction,
-	action,
-	makeObservable,
-} from 'mobx';
+import { runInAction } from 'mobx';
 
 import { DeviceCard } from './DeviceCard';
 import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
@@ -17,105 +11,79 @@ import css from './Configuration.module.css';
 import { GenericBluetoothDevice } from '../devices/GenericBluetoothDevice';
 import { Fab } from '@rmwc/fab';
 
-export const Configuration = observer(
-	class Configuration extends React.Component<{}> {
-		devices: ObservableMap<
-			string,
-			MiBluetoothDevice | iTagBluetoothDevice
-		> = new ObservableMap();
+interface Props {
+	devices: Map<string, MiBluetoothDevice | iTagBluetoothDevice>;
+}
 
-		bluetoothAvailable: boolean = false;
+export const Configuration = observer(({ devices }: Props) => {
+	const [bluetoothAvailable, setBluetoothAvailable] = useState(false);
 
-		addDevice = () => {
-			navigator.bluetooth
-				.requestDevice({
-					acceptAllDevices: true,
-					optionalServices: [
-						...MiBluetoothDevice.optionalServices,
-						...iTagBluetoothDevice.optionalServices,
-					],
-				})
-				.then(device =>
-					runInAction(() => {
-						const currentDevice = this.devices.get(device.id);
-						if (currentDevice) {
-							currentDevice.setServer(null);
-						} else {
-							this.devices.set(
-								device.id,
-								device.name?.startsWith('iTAG')
-									? new iTagBluetoothDevice(device)
-									: device.name?.startsWith('MI')
-									? new MiBluetoothDevice(device)
-									: new GenericBluetoothDevice(device)
-							);
-						}
-					})
-				)
-				.catch(error => {
-					console.log(error);
-				});
-		};
-
-		updateBluetoothAvailability = (available: boolean) =>
-			(this.bluetoothAvailable = available);
-
-		constructor(props: {}) {
-			super(props);
-
-			makeObservable(this, {
-				devices: observable,
-				bluetoothAvailable: observable,
-				updateBluetoothAvailability: action,
-				handleRemove: action,
+	useEffect(() => {
+		if ('bluetooth' in navigator) {
+			navigator.bluetooth.getAvailability().then(isBluetoothAvailable => {
+				console.log(
+					`> Bluetooth is ${isBluetoothAvailable ? 'available' : 'unavailable'}`
+				);
+				updateBluetoothAvailability(isBluetoothAvailable);
 			});
-		}
 
-		componentDidMount() {
-			if ('bluetooth' in navigator) {
-				navigator.bluetooth.getAvailability().then(isBluetoothAvailable => {
+			if ('onavailabilitychanged' in navigator.bluetooth) {
+				navigator.bluetooth.addEventListener('availabilitychanged', event => {
 					console.log(
 						`> Bluetooth is ${
-							isBluetoothAvailable ? 'available' : 'unavailable'
+							(event as any).value ? 'available' : 'unavailable'
 						}`
 					);
-					this.updateBluetoothAvailability(isBluetoothAvailable);
+					updateBluetoothAvailability((event as any).value);
 				});
-
-				if ('onavailabilitychanged' in navigator.bluetooth) {
-					navigator.bluetooth.addEventListener('availabilitychanged', event => {
-						console.log(
-							`> Bluetooth is ${
-								(event as any).value ? 'available' : 'unavailable'
-							}`
-						);
-						this.updateBluetoothAvailability((event as any).value);
-					});
-				}
 			}
 		}
-
-		handleRemove = (device: MiBluetoothDevice) =>
-			this.devices.delete(device.id);
-
-		render() {
-			const devices: Array<ReactElement> = [];
-			this.devices.forEach(device => {
-				devices.push(
-					<DeviceCard
-						key={device.id}
-						device={device}
-						onRemove={this.handleRemove}
-					/>
-				);
+	});
+	const addDevice = () => {
+		navigator.bluetooth
+			.requestDevice({
+				acceptAllDevices: true,
+				optionalServices: [
+					...MiBluetoothDevice.optionalServices,
+					...iTagBluetoothDevice.optionalServices,
+				],
+			})
+			.then(device =>
+				runInAction(() => {
+					const currentDevice = devices.get(device.id);
+					if (currentDevice) {
+						currentDevice.setServer(null);
+					} else {
+						devices.set(
+							device.id,
+							device.name?.startsWith('iTAG')
+								? new iTagBluetoothDevice(device)
+								: device.name?.startsWith('MI')
+								? new MiBluetoothDevice(device)
+								: new GenericBluetoothDevice(device)
+						);
+					}
+				})
+			)
+			.catch(error => {
+				console.log(error);
 			});
+	};
 
-			return (
-				<div className={css.configuration}>
-					<div className={css.devices}>{devices}</div>
-					<Fab icon="add" onClick={this.addDevice} />
-				</div>
-			);
-		}
-	}
-);
+	const updateBluetoothAvailability = (available: boolean) =>
+		setBluetoothAvailable(available);
+
+	const handleRemove = (device: MiBluetoothDevice) => devices.delete(device.id);
+
+	return (
+		<div className={css.configuration}>
+			{!bluetoothAvailable && <h1>No bluetooth available</h1>}
+			<div className={css.devices}>
+				{[...devices.values()].map(device => (
+					<DeviceCard key={device.id} device={device} onRemove={handleRemove} />
+				))}
+			</div>
+			<Fab icon="add" onClick={addDevice} />
+		</div>
+	);
+});

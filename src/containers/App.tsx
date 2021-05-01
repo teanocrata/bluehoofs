@@ -17,6 +17,8 @@ import { observer } from 'mobx-react';
 import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 import { Avatar } from '@rmwc/avatar';
+import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
+import { iTagBluetoothDevice } from '../devices/iTagBluetoothDevice';
 
 const darkThemeOptions = {
 	primary: '#24aee9',
@@ -72,6 +74,8 @@ export const App = observer(
 
 		user: { [key: string]: string | boolean | number } | null = null;
 
+		devices: Map<string, MiBluetoothDevice | iTagBluetoothDevice> = new Map();
+
 		login = () => {
 			if (!this.user) {
 				google.accounts.id.initialize({
@@ -120,6 +124,7 @@ export const App = observer(
 				section: observable,
 				setSection: action,
 				user: observable,
+				devices: observable,
 			});
 		}
 
@@ -185,7 +190,9 @@ export const App = observer(
 								</List>
 							</DrawerContent>
 						</Drawer>
-						{this.section === 'settings' && <Configuration />}
+						{this.section === 'settings' && (
+							<Configuration devices={this.devices} />
+						)}
 						<SnackbarQueue messages={messages} />
 					</ThemeProvider>
 				</HelmetProvider>
