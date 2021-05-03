@@ -9,7 +9,9 @@ install:
 script:
   - yarn test --coverage
   - yarn build
-after_success:
+before_deploy:
+  - git config --local user.name $USER
+  - git config --local user.email $USER
   - yarn release
   - git push --follow-tags https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git master
 deploy:
