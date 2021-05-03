@@ -23,4 +23,7 @@ export const useStore = (): TStore => ({
 		removeDevice: jest.fn(),
 		updateDevice: jest.fn(),
 	},
+	userStore: {
+		...({ store: {} } as any),
+	},
 });

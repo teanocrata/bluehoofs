@@ -3,13 +3,17 @@ import { useLocalObservable } from 'mobx-react-lite';
 
 import { DeviceStore } from './DeviceStore';
 import { UiStore } from './UiStore';
+import { UserStore } from './UserStore';
 
 class RootStore {
 	deviceStore: DeviceStore;
 	uiStore: UiStore;
+	userStore: UserStore;
+
 	constructor() {
 		this.deviceStore = new DeviceStore(this);
 		this.uiStore = new UiStore(this);
+		this.userStore = new UserStore(this);
 	}
 }
 

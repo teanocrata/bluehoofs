@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -11,59 +11,17 @@ import { Chip, ChipOnInteractionEventT } from '@rmwc/chip';
 import { ThemeProvider } from '@rmwc/theme';
 import { SimpleTopAppBar, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
 import { SnackbarQueue } from '@rmwc/snackbar';
-import { messages, notify } from '../notificationsQueue';
 import { observer } from 'mobx-react-lite';
 import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 import { Avatar } from '@rmwc/avatar';
 import { useStore } from '../store';
 
-declare var google: {
-	accounts: {
-		id: {
-			initialize: (config: any) => void;
-			prompt: (callback: (notification: any) => void) => void;
-			revoke: (email: string, callback: (done: any) => void) => void;
-		};
-	};
-};
-
 export const App = observer(() => {
-	const { uiStore } = useStore();
+	const { uiStore, userStore } = useStore();
 
 	const setSection = (event: React.MouseEvent<HTMLElement>) => {
 		uiStore.setSection((event.target as Element).id as typeof uiStore.section);
-	};
-
-	const [user, setUser] = useState(
-		null as { [key: string]: string | boolean | number } | null
-	);
-
-	const login = () => {
-		if (!user) {
-			google.accounts.id.initialize({
-				client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-				context: 'use',
-				nonce: '',
-				auto_select: 'true',
-				callback: (response: any) => setUser(parseJwt(response.credential)),
-			});
-			google.accounts.id.prompt(notification => {
-				if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-					notify({
-						body: 'Oooops, something went wrong...',
-						icon: 'warning',
-					});
-				}
-			});
-		} else {
-			google.accounts.id.revoke(user.email as string, _done => {
-				notify({
-					body: 'Revoked',
-				});
-				setUser(null);
-			});
-		}
 	};
 
 	const openTag = (_e: ChipOnInteractionEventT) =>
@@ -98,9 +56,15 @@ export const App = observer(() => {
 						{
 							icon: 'account_circle',
 							onIcon: (
-								<Avatar src={user ? (user.picture as string) : undefined} />
+								<Avatar
+									src={
+										userStore.user
+											? (userStore.user.picture as string)
+											: undefined
+									}
+								/>
 							),
-							onClick: login,
+							onClick: userStore.login,
 						},
 					]}
 				/>
@@ -132,23 +96,8 @@ export const App = observer(() => {
 					</DrawerContent>
 				</Drawer>
 				{uiStore.section === 'settings' && <Configuration />}
-				<SnackbarQueue messages={messages} />
+				<SnackbarQueue messages={uiStore.messages} />
 			</ThemeProvider>
 		</HelmetProvider>
 	);
 });
-
-function parseJwt(token: string) {
-	var base64Url = token.split('.')[1];
-	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-	var jsonPayload = decodeURIComponent(
-		atob(base64)
-			.split('')
-			.map(function (c) {
-				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-			})
-			.join('')
-	);
-
-	return JSON.parse(jsonPayload);
-}

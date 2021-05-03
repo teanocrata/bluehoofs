@@ -1,5 +1,4 @@
 import { observable, action, makeObservable } from 'mobx';
-import { notify } from '../notificationsQueue';
 import { HoofBluetoothService } from './HoofBluetoothService';
 
 export abstract class HoofBluetoothDevice {
@@ -38,10 +37,11 @@ export abstract class HoofBluetoothDevice {
 			services?.map(service => new HoofBluetoothService(service)) || null);
 
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
-		notify({
-			body: `${(event.target as BluetoothDevice).name} disconected`,
-			icon: 'warning',
-		});
+		// TODO
+		// notify({
+		// 	body: `${(event.target as BluetoothDevice).name} disconected`,
+		// 	icon: 'warning',
+		// });
 		this.setServer(null);
 	};
 
