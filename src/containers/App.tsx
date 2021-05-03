@@ -12,42 +12,11 @@ import { ThemeProvider } from '@rmwc/theme';
 import { SimpleTopAppBar, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
 import { SnackbarQueue } from '@rmwc/snackbar';
 import { messages, notify } from '../notificationsQueue';
-import { ObservableMap } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 import { Avatar } from '@rmwc/avatar';
-import { MiBluetoothDevice } from '../devices/MiBluetoothDevice';
-import { iTagBluetoothDevice } from '../devices/iTagBluetoothDevice';
-
-const darkThemeOptions = {
-	primary: '#24aee9',
-	secondary: '#e539ff',
-	error: '#b00020',
-	background: '#212121',
-	surface: '#37474F',
-	onPrimary: 'rgba(255,255,255,.87)',
-	onSecondary: 'rgba(0,0,0,0.87)',
-	onSurface: 'rgba(255,255,255,.87)',
-	onError: '#fff',
-	textPrimaryOnBackground: 'rgba(255, 255, 255, 1)',
-	textSecondaryOnBackground: 'rgba(255, 255, 255, 0.7)',
-	textHintOnBackground: 'rgba(255, 255, 255, 0.5)',
-	textDisabledOnBackground: 'rgba(255, 255, 255, 0.5)',
-	textIconOnBackground: 'rgba(255, 255, 255, 0.5)',
-	textPrimaryOnLight: 'rgba(0, 0, 0, 0.87)',
-	textSecondaryOnLight: 'rgba(0, 0, 0, 0.54)',
-	textHintOnLight: 'rgba(0, 0, 0, 0.38)',
-	textDisabledOnLight: 'rgba(0, 0, 0, 0.38)',
-	textIconOnLight: 'rgba(0, 0, 0, 0.38)',
-	textPrimaryOnDark: 'white',
-	textSecondaryOnDark: 'rgba(255, 255, 255, 0.7)',
-	textHintOnDark: 'rgba(255, 255, 255, 0.5)',
-	textDisabledOnDark: 'rgba(255, 255, 255, 0.5)',
-	textIconOnDark: 'rgba(255, 255, 255, 0.5)',
-};
-
-type Section = 'settings' | 'main';
+import { useStore } from '../store';
 
 declare var google: {
 	accounts: {
@@ -60,25 +29,15 @@ declare var google: {
 };
 
 export const App = observer(() => {
-	const [theme, setTheme] = useState('baseline' as 'dark' | 'baseline');
+	const { uiStore } = useStore();
 
-	const toggleMode = () => setTheme(theme === 'dark' ? 'baseline' : 'dark');
-
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-	const openMenu = () => setIsMenuOpen(true);
-	const closeMenu = () => setIsMenuOpen(false);
-
-	const [section, setSection] = useState('settings' as Section);
+	const setSection = (event: React.MouseEvent<HTMLElement>) => {
+		uiStore.setSection((event.target as Element).id as typeof uiStore.section);
+	};
 
 	const [user, setUser] = useState(
 		null as { [key: string]: string | boolean | number } | null
 	);
-
-	const devices: ObservableMap<
-		string,
-		MiBluetoothDevice | iTagBluetoothDevice
-	> = new ObservableMap();
 
 	const login = () => {
 		if (!user) {
@@ -114,10 +73,7 @@ export const App = observer(() => {
 
 	return (
 		<HelmetProvider>
-			<ThemeProvider
-				className={css.app}
-				options={theme === 'baseline' ? {} : darkThemeOptions}
-			>
+			<ThemeProvider className={css.app} options={uiStore.themeOptions}>
 				<Helmet>
 					<title>Blue hoofs</title>
 					<meta name="description" content="Mi band 2 for hoofs friends" />
@@ -126,7 +82,7 @@ export const App = observer(() => {
 					fixed
 					title="Blue hoofs"
 					navigationIcon
-					onNav={openMenu}
+					onNav={uiStore.openMainMenu}
 					endContent={
 						<Chip
 							onInteraction={openTag}
@@ -137,7 +93,7 @@ export const App = observer(() => {
 						{
 							icon: 'dark_mode',
 							onIcon: 'light_mode',
-							onClick: toggleMode,
+							onClick: uiStore.toggleTheme,
 						},
 						{
 							icon: 'account_circle',
@@ -149,19 +105,25 @@ export const App = observer(() => {
 					]}
 				/>
 				<TopAppBarFixedAdjust />
-				<Drawer modal open={isMenuOpen} onClose={closeMenu}>
+				<Drawer
+					modal
+					open={uiStore.isMainMenuOpen}
+					onClose={uiStore.closeMainMenu}
+				>
 					<DrawerContent>
 						<List>
 							<ListItem
-								activated={section === 'main'}
-								onClick={() => setSection('main')}
+								id="main"
+								activated={uiStore.section === 'main'}
+								onClick={setSection}
 							>
 								<ListItemGraphic />
 								<ListItemText>Main</ListItemText>
 							</ListItem>
 							<ListItem
-								activated={section === 'settings'}
-								onClick={() => setSection('settings')}
+								id="settings"
+								activated={uiStore.section === 'settings'}
+								onClick={setSection}
 							>
 								<ListItemGraphic icon="settings" />
 								<ListItemText>Settings</ListItemText>
@@ -169,7 +131,7 @@ export const App = observer(() => {
 						</List>
 					</DrawerContent>
 				</Drawer>
-				{section === 'settings' && <Configuration devices={devices} />}
+				{uiStore.section === 'settings' && <Configuration />}
 				<SnackbarQueue messages={messages} />
 			</ThemeProvider>
 		</HelmetProvider>

@@ -18,10 +18,13 @@ import '@rmwc/drawer/styles';
 import '@rmwc/avatar/styles';
 
 import { RMWCProvider } from '@rmwc/provider';
+import { StoreProvider } from './store';
 
 ReactDOM.render(
 	<RMWCProvider>
-		<App />
+		<StoreProvider>
+			<App />
+		</StoreProvider>
 	</RMWCProvider>,
 	document.getElementById('root')
 );
