@@ -11,6 +11,15 @@ export const useStore = (): TStore => ({
 		openMainMenu: jest.fn(),
 		setSection: jest.fn(),
 		toggleTheme: jest.fn(),
+		messages: {
+			array: [],
+			push: jest.fn(),
+			empty: jest.fn(),
+			remove: jest.fn(),
+			on: jest.fn(),
+			off: jest.fn(),
+		},
+		notify: jest.fn(),
 	},
 	deviceStore: {
 		...({ store: {} } as any),
@@ -25,5 +34,7 @@ export const useStore = (): TStore => ({
 	},
 	userStore: {
 		...({ store: {} } as any),
+		login: jest.fn(),
+		user: null,
 	},
 });
