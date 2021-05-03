@@ -1,4 +1,10 @@
-import { action, computed, observable, runInAction, makeObservable } from 'mobx';
+import {
+	action,
+	computed,
+	observable,
+	runInAction,
+	makeObservable,
+} from 'mobx';
 
 export class HoofBluetoothCharacteristic {
 	private _characteristic: BluetoothRemoteGATTCharacteristic;
@@ -19,19 +25,19 @@ export class HoofBluetoothCharacteristic {
 
 	characteristics: Array<BluetoothRemoteGATTCharacteristic> | null = null;
 	constructor(characteristic: BluetoothRemoteGATTCharacteristic) {
-        makeObservable(this, {
-            name: observable,
-            value: observable,
-            updateCharacteristicValue: action,
-            characteristics: observable.ref,
-            alertLevels: computed
-        });
+		makeObservable(this, {
+			name: observable,
+			value: observable,
+			updateCharacteristicValue: action,
+			characteristics: observable.ref,
+			alertLevels: computed,
+		});
 
-        this._characteristic = characteristic;
-        this.name = characteristic.uuid;
-        this.uuid = characteristic.uuid;
-        this.properties = characteristic.properties;
-        fetch(
+		this._characteristic = characteristic;
+		this.name = characteristic.uuid;
+		this.uuid = characteristic.uuid;
+		this.properties = characteristic.properties;
+		fetch(
 			`https://teanocrata.github.io/ble-assigned-numbers/uuids/0x${characteristic.uuid
 				.slice(4, 8)
 				.toUpperCase()}.json`
@@ -55,23 +61,25 @@ export class HoofBluetoothCharacteristic {
 				console.warn(`Not found info for UUID ${characteristic.uuid}`);
 				console.warn(error);
 			});
-    }
+	}
 
 	get alertLevels() {
 		if (this.name === 'Alert Level') {
-			return [{
-				value: 0x00,
-				label: 'No Alert'
-			},
-			{
-				value: 0x01,
-				label: 'Mild Alert'
-			},
-			{
-				value: 0x02,
-				label: 'High Alert'
-			}]
+			return [
+				{
+					value: 0x00,
+					label: 'No Alert',
+				},
+				{
+					value: 0x01,
+					label: 'Mild Alert',
+				},
+				{
+					value: 0x02,
+					label: 'High Alert',
+				},
+			];
 		}
-		return []
+		return [];
 	}
 }

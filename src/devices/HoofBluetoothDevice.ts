@@ -10,20 +10,20 @@ export abstract class HoofBluetoothDevice {
 	gatt: BluetoothRemoteGATTServer | null = null;
 	primaryServices: Array<HoofBluetoothService> | null = null;
 	constructor(device: BluetoothDevice) {
-        makeObservable(this, {
-            gatt: observable.ref,
-            primaryServices: observable.ref,
-            info: observable,
-            setServer: action,
-            setInfo: action,
-            setPrimaryServices: action
-        });
+		makeObservable(this, {
+			gatt: observable.ref,
+			primaryServices: observable.ref,
+			info: observable,
+			setServer: action,
+			setInfo: action,
+			setPrimaryServices: action,
+		});
 
-        this._device = device;
-        this.id = device.id;
-        this.name = device.name;
-        device.addEventListener('gattserverdisconnected', this.onDisconnected);
-    }
+		this._device = device;
+		this.id = device.id;
+		this.name = device.name;
+		device.addEventListener('gattserverdisconnected', this.onDisconnected);
+	}
 	info: any | null = null;
 
 	setServer = (gattServer: BluetoothRemoteGATTServer | null) => {
@@ -33,16 +33,14 @@ export abstract class HoofBluetoothDevice {
 
 	setInfo = (info: any) => (this.info = info);
 
-	setPrimaryServices = (
-		services: Array<BluetoothRemoteGATTService> | null
-	) =>
+	setPrimaryServices = (services: Array<BluetoothRemoteGATTService> | null) =>
 		(this.primaryServices =
 			services?.map(service => new HoofBluetoothService(service)) || null);
 
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
 		notify({
 			body: `${(event.target as BluetoothDevice).name} disconected`,
-			icon: 'warning'
+			icon: 'warning',
 		});
 		this.setServer(null);
 	};
@@ -69,7 +67,7 @@ export abstract class HoofBluetoothDevice {
 			console.error(error);
 		}
 	};
-	
+
 	disconnect = () => {
 		this._device.gatt?.disconnect();
 	};
