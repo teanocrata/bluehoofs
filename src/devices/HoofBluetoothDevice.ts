@@ -1,14 +1,16 @@
-import { observable, action, makeObservable } from 'mobx';
+import { observable, makeObservable, action } from 'mobx';
+import {TStore} from '../store';
 import { HoofBluetoothService } from './HoofBluetoothService';
 
 export abstract class HoofBluetoothDevice {
 	_device: BluetoothDevice;
+	_deviceStore: TStore['deviceStore'] | null = null;
 	id: BluetoothDevice['id'];
 	name: BluetoothDevice['name'];
 
 	gatt: BluetoothRemoteGATTServer | null = null;
 	primaryServices: Array<HoofBluetoothService> | null = null;
-	constructor(device: BluetoothDevice) {
+	constructor(deviceStore: TStore['deviceStore'], device: BluetoothDevice) {
 		makeObservable(this, {
 			gatt: observable.ref,
 			primaryServices: observable.ref,
@@ -16,8 +18,9 @@ export abstract class HoofBluetoothDevice {
 			setServer: action,
 			setInfo: action,
 			setPrimaryServices: action,
+			delete: action
 		});
-
+		this._deviceStore = deviceStore;
 		this._device = device;
 		this.id = device.id;
 		this.name = device.name;
@@ -37,19 +40,19 @@ export abstract class HoofBluetoothDevice {
 			services?.map(service => new HoofBluetoothService(service)) || null);
 
 	onDisconnected: BluetoothDeviceEventHandlers['ongattserverdisconnected'] = event => {
-		// TODO
-		// notify({
-		// 	body: `${(event.target as BluetoothDevice).name} disconected`,
-		// 	icon: 'warning',
-		// });
+		this._deviceStore?.notify({
+			body: `${(event.target as BluetoothDevice).name} disconected`,
+			icon: 'warning',
+		});
 		this.setServer(null);
 	};
 
 	connect = async () => {
 		if (this.gatt) {
-			console.warn(
-				`Trying to connect allready connected gatt server ${this.id}`
-			);
+			this._deviceStore?.notify({
+				body: `Trying to connect allready connected gatt server ${this.id}`,
+				icon: 'warning'
+			});
 			return true;
 		}
 
@@ -63,7 +66,10 @@ export abstract class HoofBluetoothDevice {
 		} catch (error) {
 			this.setServer(null);
 			this.setPrimaryServices(null);
-			console.error('Error while trying to connect ', this.name);
+			this._deviceStore?.notify({
+				body: `Error while trying to connect ${this.name}`,
+				icon: 'error'
+			});
 			console.error(error);
 		}
 	};
@@ -71,4 +77,9 @@ export abstract class HoofBluetoothDevice {
 	disconnect = () => {
 		this._device.gatt?.disconnect();
 	};
+
+	delete = () => {
+		this.disconnect();
+		this._deviceStore?.removeDevice(this);
+	}
 }

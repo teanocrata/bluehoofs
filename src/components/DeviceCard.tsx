@@ -16,10 +16,9 @@ import { Typography } from '@rmwc/typography';
 import css from './DeviceCard.module.css';
 interface Props {
 	device: MiBluetoothDevice;
-	onRemove: (device: MiBluetoothDevice) => void;
 }
 
-export const DeviceCard = observer(({ device, onRemove }: Props) => {
+export const DeviceCard = observer(({ device }: Props) => {
 	const [connecting, setConnecting] = useState(false);
 
 	const toggleConnecting = () => setConnecting(!connecting);
@@ -32,8 +31,6 @@ export const DeviceCard = observer(({ device, onRemove }: Props) => {
 			device.connect().then(toggleConnecting);
 		}
 	};
-
-	const handleRemove = () => onRemove(device);
 
 	return (
 		<Card>
@@ -55,7 +52,7 @@ export const DeviceCard = observer(({ device, onRemove }: Props) => {
 						onIcon="bluetooth_connected"
 						onClick={handleToggleConnect}
 					/>
-					<CardActionIcon icon="delete" onClick={handleRemove} />
+					<CardActionIcon icon="delete" onClick={device.delete} />
 				</CardActionIcons>
 			</CardActions>
 		</Card>

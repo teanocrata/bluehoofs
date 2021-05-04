@@ -1,3 +1,4 @@
+import {SnackbarQueueMessage} from '@rmwc/snackbar';
 import { makeAutoObservable } from 'mobx';
 import type { TStore } from '.';
 import { GenericBluetoothDevice } from '../devices/GenericBluetoothDevice';
@@ -47,7 +48,6 @@ export class DeviceStore {
 
 	removeDevice = (device: MiBluetoothDevice | iTagBluetoothDevice) => {
 		this.devices.splice(this.devices.indexOf(device), 1);
-		device.disconnect();
 		// TODO: device.dispose();
 	};
 
@@ -80,11 +80,13 @@ export class DeviceStore {
 
 	createDevice = (bluethoothDevice: BluetoothDevice) => {
 		const device = bluethoothDevice.name?.startsWith('iTAG')
-			? new iTagBluetoothDevice(bluethoothDevice)
+			? new iTagBluetoothDevice(this, bluethoothDevice)
 			: bluethoothDevice.name?.startsWith('MI')
-			? new MiBluetoothDevice(bluethoothDevice)
-			: new GenericBluetoothDevice(bluethoothDevice);
+			? new MiBluetoothDevice(this, bluethoothDevice)
+			: new GenericBluetoothDevice(this, bluethoothDevice);
 		this.devices.push(device);
 		return device;
 	};
+
+	notify = (message: SnackbarQueueMessage) => this.store.uiStore.notify(message); 
 }
