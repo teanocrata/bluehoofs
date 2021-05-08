@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://github.com/teanocrata/bluehoofs/compare/v0.1.14...v0.1.15) (2021-05-08)
+
+
+### Features
+
+* :sparkles: Autoconnect when add a new device ([4059179](https://github.com/teanocrata/bluehoofs/commit/4059179f273a0099866a449f510630ec1fd0ee36))
+
 ### [0.1.14](https://github.com/teanocrata/bluehoofs/compare/v0.1.13...v0.1.14) (2021-05-03)
 
 ### [0.1.13](https://github.com/teanocrata/bluehoofs/compare/v0.1.12...v0.1.13) (2021-04-28)
