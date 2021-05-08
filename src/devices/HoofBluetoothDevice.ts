@@ -1,4 +1,4 @@
-import { observable, makeObservable, action } from 'mobx';
+import { observable, makeObservable, action, computed } from 'mobx';
 import {TStore} from '../store';
 import { HoofBluetoothService } from './HoofBluetoothService';
 
@@ -8,6 +8,7 @@ export abstract class HoofBluetoothDevice {
 	id: BluetoothDevice['id'];
 	name: BluetoothDevice['name'];
 
+	connecting: boolean = false;
 	gatt: BluetoothRemoteGATTServer | null = null;
 	primaryServices: Array<HoofBluetoothService> | null = null;
 	constructor(deviceStore: TStore['deviceStore'], device: BluetoothDevice) {
@@ -18,15 +19,25 @@ export abstract class HoofBluetoothDevice {
 			setServer: action,
 			setInfo: action,
 			setPrimaryServices: action,
-			delete: action
+			delete: action,
+			connecting: observable,
+			toggleConnecting: action,
+			connected: computed
 		});
 		this._deviceStore = deviceStore;
 		this._device = device;
 		this.id = device.id;
 		this.name = device.name;
 		device.addEventListener('gattserverdisconnected', this.onDisconnected);
+		this.connect();
 	}
 	info: any | null = null;
+
+	get connected() {
+		return this.gatt !== null;
+	}
+
+	toggleConnecting = () => this.connecting = !this.connecting;
 
 	setServer = (gattServer: BluetoothRemoteGATTServer | null) => {
 		this.gatt = gattServer;
@@ -48,11 +59,13 @@ export abstract class HoofBluetoothDevice {
 	};
 
 	connect = async () => {
+		this.toggleConnecting();
 		if (this.gatt) {
 			this._deviceStore?.notify({
 				body: `Trying to connect allready connected gatt server ${this.id}`,
 				icon: 'warning'
 			});
+			this.toggleConnecting();
 			return true;
 		}
 
@@ -71,6 +84,8 @@ export abstract class HoofBluetoothDevice {
 				icon: 'error'
 			});
 			console.error(error);
+		} finally {
+			this.toggleConnecting();
 		}
 	};
 
