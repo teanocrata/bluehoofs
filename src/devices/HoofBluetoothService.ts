@@ -40,6 +40,7 @@ export class HoofBluetoothService {
 				console.warn(`Not found info for UUID ${service.uuid}`);
 				console.warn(error);
 			});
+		this.setCharacteristics();
 	}
 
 	setCharacteristics = async () => {

@@ -55,53 +55,71 @@ export const CharacteristicCard = observer(({ characteristic }: Props) => {
 				</a>
 			</header>
 			<List>
-				<ListItem activated={characteristic.properties.broadcast}>
-					<ListItemText>
-						<ListItemPrimaryText>broadcast</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.read}>
-					<ListItemText>
-						<ListItemPrimaryText>read</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.writeWithoutResponse}>
-					<ListItemText>
-						<ListItemPrimaryText>writeWithoutResponse</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.write}>
-					<ListItemText>
-						<ListItemPrimaryText>write</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.notify}>
-					<ListItemText>
-						<ListItemPrimaryText>notify</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.indicate}>
-					<ListItemText>
-						<ListItemPrimaryText>indicate</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem
-					activated={characteristic.properties.authenticatedSignedWrites}
-				>
-					<ListItemText>
-						<ListItemPrimaryText>authenticatedSignedWrites</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.reliableWrite}>
-					<ListItemText>
-						<ListItemPrimaryText>reliableWrite</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
-				<ListItem activated={characteristic.properties.writableAuxiliaries}>
-					<ListItemText>
-						<ListItemPrimaryText>writableAuxiliaries</ListItemPrimaryText>
-					</ListItemText>
-				</ListItem>
+				{characteristic.properties.broadcast && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>broadcast</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.read && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>read</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.writeWithoutResponse && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>writeWithoutResponse</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.write && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>write</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.notify && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>notify</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.indicate && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>indicate</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.authenticatedSignedWrites && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>
+								authenticatedSignedWrites
+							</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.reliableWrite && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>reliableWrite</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
+				{characteristic.properties.writableAuxiliaries && (
+					<ListItem>
+						<ListItemText>
+							<ListItemPrimaryText>writableAuxiliaries</ListItemPrimaryText>
+						</ListItemText>
+					</ListItem>
+				)}
 			</List>
 			<CardActions>
 				{characteristic.properties.read && (
