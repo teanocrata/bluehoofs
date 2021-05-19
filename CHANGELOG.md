@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.17](https://github.com/teanocrata/bluehoofs/compare/v0.1.16...v0.1.17) (2021-05-19)
+
+
+### Features
+
+* :construction: Notifications ([36cea54](https://github.com/teanocrata/bluehoofs/commit/36cea5422dce9f200bb77ce74a5c42a2358a956f))
+
 ### [0.1.16](https://github.com/teanocrata/bluehoofs/compare/v0.1.15...v0.1.16) (2021-05-09)
 
 
