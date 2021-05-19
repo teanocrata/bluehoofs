@@ -82,4 +82,27 @@ export class HoofBluetoothCharacteristic {
 		}
 		return [];
 	}
+
+	startNotifications = () => {
+		console.log(this._characteristic)
+		this._characteristic.addEventListener('characteristicvaluechanged',
+				handleNotifications);
+		this._characteristic.startNotifications().then(_ => {
+			console.log('> Notifications started');
+			this._characteristic.addEventListener('characteristicvaluechanged',
+				handleNotifications);
+		});
+	}
 }
+
+function handleNotifications(event: any) {
+	let value = event.target.value;
+	let a = [];
+	// Convert raw data bytes to hex values just for the sake of showing something.
+	// In the "real" world, you'd use data.getUint8, data.getUint16 or even
+	// TextDecoder to process raw data bytes.
+	for (let i = 0; i < value.byteLength; i++) {
+	  a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+	}
+	console.log('> ' + a.join(' '));
+  }

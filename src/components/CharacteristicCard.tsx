@@ -28,6 +28,10 @@ export const CharacteristicCard = observer(({ characteristic }: Props) => {
 		}
 	};
 
+	const handleToggleNotifications = () => {
+		characteristic.startNotifications();
+	};
+
 	const handleToggle = async (
 		event: React.MouseEvent<HTMLElement, MouseEvent>
 	) => {
@@ -141,6 +145,12 @@ export const CharacteristicCard = observer(({ characteristic }: Props) => {
 							}
 						/>
 					))}
+					{characteristic.properties.notify && (
+						<CardActionIcon
+							icon="notifications_off"
+							onClick={handleToggleNotifications}
+						/>
+					)}
 				</CardActionIcons>
 			</CardActions>
 		</Card>
