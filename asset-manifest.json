@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/bluehoofs/static/css/main.a57efdf8.chunk.css",
+    "main.js": "/bluehoofs/static/js/main.a0c2d266.chunk.js",
+    "main.js.map": "/bluehoofs/static/js/main.a0c2d266.chunk.js.map",
+    "runtime-main.js": "/bluehoofs/static/js/runtime-main.a86120bf.js",
+    "runtime-main.js.map": "/bluehoofs/static/js/runtime-main.a86120bf.js.map",
+    "static/css/2.e7e877bf.chunk.css": "/bluehoofs/static/css/2.e7e877bf.chunk.css",
+    "static/js/2.593376cc.chunk.js": "/bluehoofs/static/js/2.593376cc.chunk.js",
+    "static/js/2.593376cc.chunk.js.map": "/bluehoofs/static/js/2.593376cc.chunk.js.map",
+    "static/js/3.17b85692.chunk.js": "/bluehoofs/static/js/3.17b85692.chunk.js",
+    "static/js/3.17b85692.chunk.js.map": "/bluehoofs/static/js/3.17b85692.chunk.js.map",
+    "index.html": "/bluehoofs/index.html",
+    "service-worker.js": "/bluehoofs/service-worker.js",
+    "service-worker.js.map": "/bluehoofs/service-worker.js.map",
+    "static/css/2.e7e877bf.chunk.css.map": "/bluehoofs/static/css/2.e7e877bf.chunk.css.map",
+    "static/css/main.a57efdf8.chunk.css.map": "/bluehoofs/static/css/main.a57efdf8.chunk.css.map",
+    "static/js/2.593376cc.chunk.js.LICENSE.txt": "/bluehoofs/static/js/2.593376cc.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a86120bf.js",
+    "static/css/2.e7e877bf.chunk.css",
+    "static/js/2.593376cc.chunk.js",
+    "static/css/main.a57efdf8.chunk.css",
+    "static/js/main.a0c2d266.chunk.js"
+  ]
+}
