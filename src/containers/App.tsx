@@ -16,6 +16,7 @@ import { Drawer, DrawerContent } from '@rmwc/drawer';
 import { List, ListItem, ListItemGraphic, ListItemText } from '@rmwc/list';
 import { Avatar } from '@rmwc/avatar';
 import { useStore } from '../store';
+import {Console} from '../components/Console';
 
 export const App = observer(() => {
 	const { uiStore, userStore } = useStore();
@@ -96,6 +97,7 @@ export const App = observer(() => {
 					</DrawerContent>
 				</Drawer>
 				{uiStore.section === 'settings' && <Configuration />}
+				<Console />
 				<SnackbarQueue messages={uiStore.messages} />
 			</ThemeProvider>
 		</HelmetProvider>

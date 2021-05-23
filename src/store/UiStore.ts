@@ -10,6 +10,7 @@ export class UiStore {
 	isMainMenuOpen: boolean = false;
 	messages: ReturnType<typeof createSnackbarQueue>['messages'];
 	notify: ReturnType<typeof createSnackbarQueue>['notify'];
+	isConsoleVisible: boolean = true;
 
 	constructor(store: TStore) {
 		makeAutoObservable(this);
@@ -34,4 +35,5 @@ export class UiStore {
 		this.section = section;
 		this.isMainMenuOpen = false;
 	};
+	toggleConsole = () => this.isConsoleVisible = !this.isConsoleVisible;
 }
